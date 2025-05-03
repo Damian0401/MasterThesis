@@ -1,0 +1,72 @@
+### Findings in the Code
+
+1. **SQL Injection Vulnerability**  
+   - **Line number:** 16  
+   - **Description:** Dynamically constructing the SQL query using unvalidated user inputs (`username` and `password`) without parameterized queries can leave the application vulnerable to SQL injection attacks.  
+   - **Severity:** [BLOCKER]  
+   - **Tags:** #vulnerability  
+
+2. **Hardcoded Database Credentials**  
+   - **Line number:** 13  
+   - **Description:** The hardcoded database connection string exposes sensitive information such as the database server, username, and password.  
+   - **Severity:** [CRITICAL]  
+   - **Tags:** #security-hotspot  
+
+3. **Logging Sensitive Information**  
+   - **Line number:** 26  
+   - **Description:** Writing the username to a log file without sanitization or encryption might lead to sensitive information being exposed.  
+   - **Severity:** [CRITICAL]  
+   - **Tags:** #vulnerability  
+
+4. **Weak Encryption Algorithm**  
+   - **Line number:** 33  
+   - **Description:** The XOR-based encryption implemented in the `EncryptData` method is not a secure cryptographic algorithm and should not be used for sensitive data.  
+   - **Severity:** [BLOCKER]  
+   - **Tags:** #vulnerability  
+
+5. **Unvalidated User Input in File Writing**  
+   - **Line number:** 25  
+   - **Description:** Allowing user input for the file name without validation or sanitization may lead to directory traversal attacks.  
+   - **Severity:** [MAJOR]  
+   - **Tags:** #vulnerability  
+
+6. **Unsecure API Call**  
+   - **Line number:** 37  
+   - **Description:** Making an unverified HTTP request with user input (`username`) could lead to information disclosure or remote code execution attacks if the input is untrusted. Additionally, HTTP usage is unsecure, and HTTPS should be enforced.  
+   - **Severity:** [MAJOR]  
+   - **Tags:** #security-hotspot  
+
+7. **Hardcoded Cryptographic Key**  
+   - **Line number:** 32  
+   - **Description:** The use of a hardcoded cryptographic key diminishes the security of the encryption and makes it vulnerable to reverse-engineering attacks.  
+   - **Severity:** [CRITICAL]  
+   - **Tags:** #security-hotspot  
+
+8. **Blocking I/O in Async Method**  
+   - **Line number:** 44  
+   - **Description:** The `FetchDataAsync` method blocks the async task by calling `Task.FromResult()` instead of using a truly asynchronous approach (e.g., `await` with `Task.Run()` or an async API).  
+   - **Severity:** [MAJOR]  
+   - **Tags:** #code-smell  
+
+9. **Deprecated WebClient Usage**  
+   - **Line numbers:** 36, 45  
+   - **Description:** The `WebClient` class is considered obsolete and should be replaced with the `HttpClient` class for better performance and modern API usage.  
+   - **Severity:** [MINOR]  
+   - **Tags:** #general  
+
+10. **Improper Exception Handling**  
+    - **Line number:** N/A (Entire file)  
+    - **Description:** There is no exception handling for potential errors such as database connection issues, file system write failures, or API request errors. This can lead to ungraceful application crashes.  
+    - **Severity:** [MAJOR]  
+    - **Tags:** #bug  
+
+---
+
+### Summary of Findings:
+
+| **Severity**       | **Count** |
+|---------------------|-----------|
+| **[BLOCKER]**       | 2         |
+| **[CRITICAL]**      | 3         |
+| **[MAJOR]**         | 4         |
+| **[MINOR]**         | 1         |

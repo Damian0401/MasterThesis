@@ -1,0 +1,13 @@
+1. [CRITICAL] #vulnerability - Injection Vulnerability (SQL Injection) - Line 21: The application directly concatenates user inputs into the SQL query, which can lead to SQL injection attacks if an attacker provides malicious input.
+
+2. [CRITICAL] #vulnerability - Sensitive Data Exposure - Line 27: The application uses hard-coded credentials (admin:12345) for the database connection, which is a security risk.
+
+3. [CRITICAL] #vulnerability - Sensitive Data Exposure - Line 35: The encryption key is hard-coded in the application, which makes the encrypted data vulnerable if the application's code is accessed by an unauthorized user.
+
+4. [MAJOR] #code-smell - Complex or Lengthy Method - Line 56: The EncryptData method is simple and could be improved, but it's not a major issue. It could be refactored for better readability or extended for stronger encryption.
+
+5. [INFO] #general - Style Violations - Line 57: The method name FetchDataAsync follows .NET naming conventions, but it returns a Task.FromResult instead of actually performing an asynchronous operation, which could be misleading.
+
+6. [MAJOR] #security-hotspot - Sensitive API Usage - Line 58: The application uses WebClient to make an HTTP request, which could potentially expose sensitive information in the request or response if not properly handled.
+
+7. [MINOR] #code-smell - Duplicated Code - Line 65: The WebClient client is instantiated twice, once for the SQL query and once for the HTTP request. This could be refactored to a single instance or extracted to a separate method or class.
