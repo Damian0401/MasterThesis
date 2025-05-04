@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using SonarQubeToSarif.Dtos;
 
 namespace SonarQubeToSarif;
@@ -157,7 +158,8 @@ internal static class SonarQubeParser
             { 
                 WriteIndented = true, 
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
             });
         await File.WriteAllTextAsync(outputFileName, content, cancellationToken);
     }
@@ -170,20 +172,20 @@ internal static class SonarQubeParser
         return httpClient;
     }
 
-    private static string GetRuleSeverity(string severity)
+    private static SarifDto.SeverityLevel GetRuleSeverity(string severity)
     {
         return severity switch
         {
             // Issue severity
-            "BLOCKER" => SarifDto.SeverityLevels.Error,
-            "CRITICAL" => SarifDto.SeverityLevels.Error,
-            "MAJOR" => SarifDto.SeverityLevels.Warning,
-            "MINOR" => SarifDto.SeverityLevels.Note,
-            "INFO" => SarifDto.SeverityLevels.None,
+            "BLOCKER" => SarifDto.SeverityLevel.Error,
+            "CRITICAL" => SarifDto.SeverityLevel.Error,
+            "MAJOR" => SarifDto.SeverityLevel.Warning,
+            "MINOR" => SarifDto.SeverityLevel.Note,
+            "INFO" => SarifDto.SeverityLevel.None,
             // Hotspot severity
-            "HIGH" => SarifDto.SeverityLevels.Error,
-            "MEDIUM" => SarifDto.SeverityLevels.Warning,
-            "LOW" => SarifDto.SeverityLevels.Note,
+            "HIGH" => SarifDto.SeverityLevel.Error,
+            "MEDIUM" => SarifDto.SeverityLevel.Warning,
+            "LOW" => SarifDto.SeverityLevel.Note,
             _ => throw new ArgumentOutOfRangeException(nameof(severity), severity, null)
         };
     }

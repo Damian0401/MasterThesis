@@ -16,7 +16,7 @@ internal record SarifDto
 
     public record DefaultConfigurationDto
     {
-        public required string Level { get; set; }
+        public required SeverityLevel Level { get; set; }
     }
 
     public record DriverDto
@@ -67,7 +67,7 @@ internal record SarifDto
     {
         public required string RuleId { get; set; }
         public required int RuleIndex { get; set; }
-        public required string Level { get; set; }
+        public required SeverityLevel Level { get; set; }
         public required MessageDto Message { get; set; }
         public required List<LocationDto> Locations { get; set; }
     }
@@ -97,11 +97,11 @@ internal record SarifDto
         public required DriverDto Driver { get; set; }
     }
 
-    internal static class SeverityLevels
+    internal enum SeverityLevel
     {
-        internal const string Error = "error";
-        internal const string Warning = "warning";
-        internal const string Note = "note";
-        internal const string None = "none";
+        Error,
+        Warning,
+        Note,
+        None,
     }
 }

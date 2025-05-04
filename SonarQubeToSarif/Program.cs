@@ -23,4 +23,4 @@ if (ConsoleHelper.TryParseArgs(args, out var parsedArgs))
         outputFileName ?? ConsoleHelper.DefaultOutputFileName,
         cts.Token);
 }
-Console.WriteLine($"Conversion completed in {clock.Elapsed.TotalSeconds} seconds.");
+Console.WriteLine($"Conversion completed in {clock.Elapsed.TotalSeconds:0.####} seconds.");
