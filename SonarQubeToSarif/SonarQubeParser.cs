@@ -12,8 +12,10 @@ internal static class SonarQubeParser
     private const string IssuesUrl = "/api/issues/search";
     private const string HotspotsUrl = "/api/hotspots/search";
     private const string RulesUrl = "/api/rules/show";
+    private const string SarifSchema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json";
+    private const string SarifVersion = "2.1.0";
 
-    internal static async Task Parse(
+    internal static async Task ParseAsync(
         string host,
         string project,
         string token,
@@ -133,8 +135,8 @@ internal static class SonarQubeParser
 
         var sarif = new SarifDto
         {
-            Schema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
-            Version = "2.1.0",
+            Schema = SarifSchema,
+            Version = SarifVersion,
             Runs =
             [
                 new()

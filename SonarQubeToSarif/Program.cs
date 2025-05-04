@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using SonarQubeToSarif;
 
-var clock = Stopwatch.StartNew();
-Console.WriteLine("Starting SonarQube to SARIF conversion...");
 if (ConsoleHelper.TryParseArgs(args, out var parsedArgs))
 {
+    var clock = Stopwatch.StartNew();
+    Console.WriteLine("Starting SonarQube to SARIF conversion...");
     var host = parsedArgs[ConsoleHelper.Arg.Host];
     var project = parsedArgs[ConsoleHelper.Arg.Project];
     var token = parsedArgs[ConsoleHelper.Arg.Token];
@@ -16,11 +16,11 @@ if (ConsoleHelper.TryParseArgs(args, out var parsedArgs))
         e.Cancel = true;
         cts.Cancel();
     };
-    await SonarQubeParser.Parse(
+    await SonarQubeParser.ParseAsync(
         host,
         project,
         token,
         outputFileName ?? ConsoleHelper.DefaultOutputFileName,
         cts.Token);
+    Console.WriteLine($"Conversion completed in {clock.Elapsed.TotalSeconds:0.####} seconds.");
 }
-Console.WriteLine($"Conversion completed in {clock.Elapsed.TotalSeconds:0.####} seconds.");

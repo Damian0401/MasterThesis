@@ -1,33 +1,42 @@
-namespace SonarQubeToSarif;
+namespace ProjectAnalizer;
 
 internal class ConsoleHelper
 {
     private static readonly IDictionary<string, Arg> ArgsMap = new Dictionary<string, Arg>(StringComparer.OrdinalIgnoreCase)
     {
-        ["--host"] = Arg.Host,
-        ["-h"] = Arg.Host,
-        ["--project"] = Arg.Project,
-        ["-p"] = Arg.Project,
+        ["--url"] = Arg.Url,
+        ["-u"] = Arg.Url,
+        ["--models"] = Arg.Models,
+        ["-m"] = Arg.Models,
         ["--token"] = Arg.Token,
         ["-t"] = Arg.Token,
         ["--output"] = Arg.Output,
         ["-o"] = Arg.Output,
+        ["--extensions"] = Arg.Extensions,
+        ["-e"] = Arg.Extensions,
+        ["--skip"] = Arg.Skip,
+        ["-s"] = Arg.Skip,
     };
-    private static readonly Arg[] RequiredArgs = [Arg.Host, Arg.Project, Arg.Token];
+    private static readonly Arg[] RequiredArgs = [Arg.Models, Arg.Token];
     private const string HelpArg = "--help";
     private const string HelpText = """
-    Tool used to transform SonarQube report to SARIF format.
+    Tool used to analyze a project using selected model and generate SARIF report.
     Usage:
-      SonarQubeToSarif [--help] --host <host> --project <project> [--output <output_file>]
+      ProjectAnalizer [--help] --model <model> --token <token> [--endpoint <endpoint>] [--output <output_file>]
 
     Arguments:
-      --help           Display help message.
-      --host, -h       Specify the host to connect to.
-      --project, -p    Specify the project to use.
-      --token, -t      Specify the token to use for authentication.
-      --output, -o     Specify the output file name (optional, default: output.sarif).
+      --help            Display help message.
+      --models, -m      Specify the list of models to use for analysis (required).
+      --token, -t       Specify the token to use for authentication.
+      --url, -u         Specify the endpoint URL (optional, default: https://models.github.ai/inference).
+      --output, -o      Specify the output file name (optional, default: output.sarif).
+      --extensions, -e  Specify the file extensions to analyze (optional, default: cs,sln,slnx,csproj,json).
+      --skip, -s        Specify the directories to skip (optional, default: bin,obj).
     """;
     internal const string DefaultOutputFileName = "output.sarif";
+    internal const string DefaultEndpoint = "https://models.github.ai/inference";
+    internal static readonly IReadOnlyCollection<string> DefaultExtensions = ["cs", "sln", "slnx", "csproj", "json"];
+    internal static readonly IReadOnlyCollection<string> DefaultSkip = ["bin", "obj"];
     internal static bool TryParseArgs(string[] args, out IDictionary<Arg, string> parsedArgs)
     {
         parsedArgs = new Dictionary<Arg, string>();
@@ -68,9 +77,11 @@ internal class ConsoleHelper
 
     internal enum Arg
     {
-        Host,
-        Project,
+        Url,
+        Models,
         Token,
         Output,
+        Extensions,
+        Skip,
     }
 }
