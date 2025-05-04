@@ -1,4 +1,8 @@
-$config = Import-PowerShellDataFile -Path .\sonarqube-config.psd1
+param(
+    [string]$configPath
+)
+
+$config = Import-PowerShellDataFile -Path $configPath
 dotnet tool restore
 dotnet sonarscanner begin `
     /k:"$($config.SONARQUBE_PROJECT_NAME)" `
@@ -6,4 +10,4 @@ dotnet sonarscanner begin `
     /d:sonar.token="$($config.SONARQUBE_ANALYSE_TOKEN)"
 dotnet build
 dotnet sonarscanner end /d:sonar.token="$($config.SONARQUBE_ANALYSE_TOKEN)"
-SonarQubeToSarif -h $config.SONARQUBE_HOST_URL -p demo -t $config.SONARQUBE_API_TOKEN -o sonarqube-result.sarif
+SonarQubeToSarif -h $config.SONARQUBE_HOST_URL -p demo -t $config.SONARQUBE_API_TOKEN -o ./.sarif/sonarqube-result.sarif
