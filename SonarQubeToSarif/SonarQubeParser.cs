@@ -91,10 +91,10 @@ internal static class SonarQubeParser
                         },
                         Region = new()
                         {
-                            StartLine = i.TextRange.StartLine,
-                            EndLine = i.TextRange.EndLine,
-                            StartColumn = i.TextRange.StartOffset,
-                            EndColumn = i.TextRange.EndOffset
+                            StartLine = i.TextRange.StartLine + 1,
+                            EndLine = i.TextRange.EndLine + 1,
+                            StartColumn = i.TextRange.StartOffset + 1,
+                            EndColumn = i.TextRange.EndOffset + 1
                         }
                     }
                 }
