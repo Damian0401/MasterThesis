@@ -1,29 +1,13 @@
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Azure;
+using Azure.AI.Inference;
 using ProjectAnalizer.Dtos;
 
 namespace ProjectAnalizer;
 
 internal class ProjectAnalyzer
 {
-    private const string BasePrompt = """
-    You are a static code analysis engine. Your task is to review the provided source code and identify:
-    - *Security vulnerabilities* such as injection risks, improper authentication, insecure data handling, outdated dependencies, etc.
-    - *Code smells* including poor coding practices, anti-patterns, and maintainability issues.
-    - *Bugs or risky logic* such as null pointer dereferencing, race conditions, unhandled edge cases, or logical errors.
-
-    Your output should formated and structured in rules and results.
-
-    Input files:
-
-    
-    """;
-
-    private const string SarifSchema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json";
-    private const string SarifVersion = "2.1.0";
-
     internal static async Task AnalyzeAsync(
         IReadOnlyCollection<string> models,
         string token,
@@ -46,30 +30,39 @@ internal class ProjectAnalyzer
             fileContents[relativePath] = fileContent;
         }
 
-        var promptBuilder = new StringBuilder(BasePrompt);
+        var promptBuilder = new StringBuilder(Constants.SystemPrompt);
         foreach (var (key, value) in fileContents)
         {
             promptBuilder.AppendLine($"----- {key}");
             promptBuilder.AppendLine(value);
         }
         promptBuilder.AppendLine("-----");
-        var prompt = promptBuilder.ToString();
-        await File.WriteAllTextAsync("prompt.txt", prompt, cancellationToken); // TODO: remove
+        var userPrompt = promptBuilder.ToString();
+        await File.WriteAllTextAsync("prompt.txt", userPrompt, cancellationToken); // TODO Remove
+
+        var client = CreateChatClient(token, endpoint);
 
         var sarif = new SarifDto
         {
-            Schema = SarifSchema,
-            Version = SarifVersion,
+            Schema = Constants.SarifSchema,
+            Version = Constants.SarifVersion,
             Runs = []
         };
 
         foreach (var model in models)
         {
-            var response = new LlmResponseDto
+            var dto = await GetLlmResponseOrNullAsync(model, userPrompt, client, cancellationToken);
+            if (dto is null)
             {
-                Rules = [],
-                Results = []
-            };
+                continue;
+            }
+            var rules = dto.Results
+                .GroupBy(x => x.RuleId)
+                .Select(MapToRule())
+                .ToList();
+            var results = dto.Results
+                .Select(MapToResult(rules))
+                .ToList();
             sarif.Runs.Add(new SarifDto.RunDto
             {
                 Tool = new SarifDto.ToolDto
@@ -80,20 +73,128 @@ internal class ProjectAnalyzer
                         SemanticVersion = "1.0.0",
                         Version = "1.0.0",
                         InformationUri = endpoint,
-                        Rules = response.Rules
+                        Rules = rules
                     }
                 },
-                Results = response.Results,
+                Results = results,
             });
         }
 
-        var content = JsonSerializer.Serialize(sarif, new JsonSerializerOptions() 
-            { 
-                WriteIndented = true, 
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
-            });
+        var content = JsonSerializer.Serialize(sarif, Constants.SarifJsonOptions);
         await File.WriteAllTextAsync(outputFileName, content, cancellationToken);
+    }
+
+    private static Func<IGrouping<string, LlmResponseDto.ResultDto>, SarifDto.RuleDto> MapToRule()
+    {
+        return x => new SarifDto.RuleDto
+        {
+            Id = x.Key,
+            DefaultConfiguration = new()
+            {
+                Level = x.GroupBy(r => r.Level)
+                    .OrderByDescending(r => r.Count())
+                    .First()
+                    .First()
+                    .Level
+            },
+            Help = new()
+            {
+                Text = string.Empty
+            },
+            Properties = new()
+            {
+                Categories = [],
+                Tags = []
+            },
+            ShortDescription = new()
+            {
+                Text = x.First().RuleDescription
+            }
+        };
+    }
+
+    private static Func<LlmResponseDto.ResultDto, SarifDto.ResultDto> MapToResult(List<SarifDto.RuleDto> rules)
+    {
+        return x => new SarifDto.ResultDto
+        {
+            Level = x.Level,
+            RuleId = x.RuleId,
+            Message = new()
+            {
+                Text = x.Message
+            },
+            RuleIndex = rules.IndexOf(rules.First(r => r.Id == x.RuleId)),
+            Locations = [
+                new()
+                {
+                    PhysicalLocation = new()
+                    {
+                        ArtifactLocation = new()
+                        {
+                            Uri = x.Path,
+                            UriBaseId = "solutionDir"
+                        },
+                        Region = new()
+                        {
+                            StartLine = x.StartLine,
+                            EndLine = x.EndLine,
+                            StartColumn = x.StartColumn,
+                            EndColumn = x.EndColumn
+                        }
+                    }
+                }
+            ]
+        };
+    }
+
+    private static async Task<LlmResponseDto?> GetLlmResponseOrNullAsync(
+        string model, 
+        string userPrompt, 
+        ChatCompletionsClient client,
+        CancellationToken cancellationToken)
+    {
+        var options = new ChatCompletionsOptions
+        {
+            Model = model,
+            Messages = [
+                new ChatRequestUserMessage(userPrompt),
+            ]
+        };
+
+        var chatResponse = await client.CompleteAsync(options, cancellationToken);
+        var match = Constants.JsonRegex().Match(chatResponse.Value.Content);
+        if (!match.Success)
+        {
+            await LogAsync($"{model} failed - json tag is missing.", cancellationToken); // TODO Remove
+            return null;
+        }
+        var jsonContent = match.Groups[1].Value;
+        try
+        {
+            var responseDto = JsonSerializer.Deserialize<IEnumerable<LlmResponseDto.ResultDto>>(jsonContent, Constants.ChatJsonOptions);
+            await LogAsync($"{model} successed.", cancellationToken); // TODO Remove
+            return new LlmResponseDto
+            {
+                Results = responseDto!
+            };
+        }
+        catch (Exception e)
+        {
+            await LogAsync($"{model} failed - {e.Message}", cancellationToken); // TODO Remove
+            return null;
+        }
+    }
+
+    private static ChatCompletionsClient CreateChatClient(string token, string endpoint)
+    {
+        var credential = new AzureKeyCredential(token);
+        return new ChatCompletionsClient(
+            new Uri(endpoint),
+            credential);
+    }
+
+    private static async Task LogAsync(string message, CancellationToken cancellationToken)
+    {
+        await File.AppendAllTextAsync("logs.txt", $"{DateTime.Now}: {message}\n", cancellationToken);
     }
 }
