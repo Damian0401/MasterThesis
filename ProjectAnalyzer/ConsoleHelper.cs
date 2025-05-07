@@ -1,4 +1,4 @@
-namespace ProjectAnalizer;
+namespace ProjectAnalyzer;
 
 internal class ConsoleHelper
 {

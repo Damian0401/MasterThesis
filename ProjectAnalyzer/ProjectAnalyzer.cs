@@ -1,13 +1,16 @@
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using Azure;
 using Azure.AI.Inference;
-using ProjectAnalizer.Dtos;
+using ProjectAnalyzer.Dtos;
 
 namespace ProjectAnalizer;
 
 internal class ProjectAnalyzer
 {
+    private static readonly Stopwatch Clock = new();
+
     internal static async Task AnalyzeAsync(
         IReadOnlyCollection<string> models,
         string token,
@@ -30,7 +33,7 @@ internal class ProjectAnalyzer
             fileContents[relativePath] = fileContent;
         }
 
-        var promptBuilder = new StringBuilder(Constants.SystemPrompt);
+        var promptBuilder = new StringBuilder();
         foreach (var (key, value) in fileContents)
         {
             promptBuilder.AppendLine($"----- {key}");
@@ -50,10 +53,11 @@ internal class ProjectAnalyzer
         };
 
         foreach (var model in models)
-        {
+        {            
             var dto = await GetLlmResponseOrNullAsync(model, userPrompt, client, cancellationToken);
             if (dto is null)
             {
+                Console.WriteLine($"{model} skip."); // TODO Remove
                 continue;
             }
             var rules = dto.Results
@@ -78,6 +82,7 @@ internal class ProjectAnalyzer
                 },
                 Results = results,
             });
+            Console.WriteLine($"{model} done."); // TODO Remove
         }
 
         var content = JsonSerializer.Serialize(sarif, Constants.SarifJsonOptions);
@@ -91,11 +96,11 @@ internal class ProjectAnalyzer
             Id = x.Key,
             DefaultConfiguration = new()
             {
-                Level = x.GroupBy(r => r.Level)
+                Level = x.Select(x => x.Level)
+                    .GroupBy(r => r)
                     .OrderByDescending(r => r.Count())
                     .First()
                     .First()
-                    .Level
             },
             Help = new()
             {
@@ -103,7 +108,13 @@ internal class ProjectAnalyzer
             },
             Properties = new()
             {
-                Categories = [],
+                Categories = [
+                    x.Select(x => x.Category)
+                        .GroupBy(r => r)
+                        .OrderByDescending(r => r.Count())
+                        .First()
+                        .First()
+                ],
                 Tags = []
             },
             ShortDescription = new()
@@ -157,22 +168,26 @@ internal class ProjectAnalyzer
         {
             Model = model,
             Messages = [
+                new ChatRequestUserMessage(Constants.SystemPrompt),
                 new ChatRequestUserMessage(userPrompt),
             ]
         };
 
+        Clock.Restart();
         var chatResponse = await client.CompleteAsync(options, cancellationToken);
+        Clock.Stop();
+
         var match = Constants.JsonRegex().Match(chatResponse.Value.Content);
         if (!match.Success)
         {
-            await LogAsync($"{model} failed - json tag is missing.", cancellationToken); // TODO Remove
+            await LogAsync($"{model} failed - {Clock.Elapsed.TotalSeconds:0.####} seconds - json tag is missing", cancellationToken); // TODO Remove
             return null;
         }
         var jsonContent = match.Groups[1].Value;
         try
         {
             var responseDto = JsonSerializer.Deserialize<IEnumerable<LlmResponseDto.ResultDto>>(jsonContent, Constants.ChatJsonOptions);
-            await LogAsync($"{model} successed.", cancellationToken); // TODO Remove
+            await LogAsync($"{model} successed - {Clock.Elapsed.TotalSeconds:0.####} seconds", cancellationToken); // TODO Remove
             return new LlmResponseDto
             {
                 Results = responseDto!
@@ -180,7 +195,7 @@ internal class ProjectAnalyzer
         }
         catch (Exception e)
         {
-            await LogAsync($"{model} failed - {e.Message}", cancellationToken); // TODO Remove
+            await LogAsync($"{model} failed - {Clock.Elapsed.TotalSeconds:0.####} seconds - {e.Message}", cancellationToken); // TODO Remove
             return null;
         }
     }

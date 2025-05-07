@@ -1,4 +1,4 @@
-namespace ProjectAnalizer.Dtos;
+namespace ProjectAnalyzer.Dtos;
 
 internal record LlmResponseDto
 {
@@ -10,6 +10,7 @@ internal record LlmResponseDto
         public required string Message { get; set; }
         public required SarifDto.SeverityLevel Level { get; set; }
         public required string Path { get; set; }
+        public required string Category { get; set; }
         public required int StartLine { get; set; }
         public required int EndLine { get; set; }
         public required int StartColumn { get; set; }

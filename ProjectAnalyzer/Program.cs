@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
-using ProjectAnalizer;
+using ProjectAnalyzer;
+using Analyzer = ProjectAnalizer.ProjectAnalyzer;
 
 if (ConsoleHelper.TryParseArgs(args, out var parsedArgs))
 {
@@ -18,7 +19,7 @@ if (ConsoleHelper.TryParseArgs(args, out var parsedArgs))
         e.Cancel = true;
         cts.Cancel();
     };
-    await ProjectAnalyzer.AnalyzeAsync(
+    await Analyzer.AnalyzeAsync(
         models.Split(","),
         token,
         endpoint ?? ConsoleHelper.DefaultEndpoint,

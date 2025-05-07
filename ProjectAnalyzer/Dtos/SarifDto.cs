@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace ProjectAnalizer.Dtos;
+namespace ProjectAnalyzer.Dtos;
 
 internal record SarifDto
 {
