@@ -4,6 +4,7 @@ param(
 
 New-Item -ItemType Directory -Force -Path '.sarif' | Out-Null
 $config = Import-PowerShellDataFile -Path $configPath
+dotnet tool install dotnet-sonarscanner
 dotnet tool restore
 dotnet sonarscanner begin `
     /k:"$($config.SONARQUBE_PROJECT_NAME)" `
