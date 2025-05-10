@@ -28,7 +28,7 @@ internal static partial class Constants
     Ensure the JSON is well-formed and strictly adheres to this json structure. All fields are required.
     """;
 
-    internal const string SarifSchema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json";
+    internal const string SarifSchema = "https://json.schemastore.org/sarif-2.1.0.json";
 
     internal const string SarifVersion = "2.1.0";
 
