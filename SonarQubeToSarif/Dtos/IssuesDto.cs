@@ -34,7 +34,7 @@ internal record IssuesDto
         public required string Severity { get; set; }
         public required string Component { get; set; }
         public required string Project { get; set; }
-        public required int Line { get; set; }
+        public int? Line { get; set; }
         public required string Hash { get; set; }
         public required TextRangeDto TextRange { get; set; }
         public required List<object> Flows { get; set; }

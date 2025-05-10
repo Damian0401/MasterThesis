@@ -23,14 +23,15 @@ internal static class SonarQubeParser
         CancellationToken cancellationToken = default)
     {
         using var httpClient = CreateHttpClient(host, token);
-        var queryParam = $"?project={project}";
         var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
         };
-        var hotspots = await httpClient.GetFromJsonAsync<HotspotsDto>(HotspotsUrl + queryParam, options, cancellationToken);
+        var hotspotsQueryParam = $"?project={project}";
+        var hotspots = await httpClient.GetFromJsonAsync<HotspotsDto>(HotspotsUrl + hotspotsQueryParam, options, cancellationToken);
         ArgumentNullException.ThrowIfNull(hotspots, nameof(HotspotsDto));
-        var issues = await httpClient.GetFromJsonAsync<IssuesDto>(IssuesUrl + queryParam, options, cancellationToken);
+        var issuesQueryParam = $"?componentKeys={project}";
+        var issues = await httpClient.GetFromJsonAsync<IssuesDto>(IssuesUrl + issuesQueryParam, options, cancellationToken);
         ArgumentNullException.ThrowIfNull(issues, nameof(IssuesDto));
         
         var hotspotsRules = hotspots.Hotspots.Select(h => h.RuleKey).ToList();
