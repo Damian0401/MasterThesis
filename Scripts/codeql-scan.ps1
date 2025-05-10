@@ -2,6 +2,7 @@ param(
     [string]$configPath
 )
 
+New-Item -ItemType Directory -Force -Path '.sarif' | Out-Null
 $config = Import-PowerShellDataFile -Path $configPath
 if (Test-Path $config.CODEQL_DATABASE_NAME)
 {
