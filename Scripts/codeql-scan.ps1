@@ -10,4 +10,8 @@ if (Test-Path $config.CODEQL_DATABASE_NAME)
 }
 dotnet clean
 codeql database create $config.CODEQL_DATABASE_NAME --command "dotnet build" --language=csharp
-codeql database analyze $config.CODEQL_DATABASE_NAME --format=sarif-latest --output=.sarif/codeql-result.sarif
+codeql database analyze $config.CODEQL_DATABASE_NAME `
+	--format=sarif-latest `
+	--output=.sarif/codeql-result.sarif `
+	--ram=4096 `
+	csharp-security-extended.qls
