@@ -180,14 +180,14 @@ internal class ProjectAnalyzer
         var match = Constants.JsonRegex().Match(chatResponse.Value.Content);
         if (!match.Success)
         {
-            await LogAsync($"{model} failed - {Clock.Elapsed.TotalSeconds:0.####} seconds - json tag is missing", cancellationToken); // TODO Remove
+            await LogAsync($"{model} failed - {Clock.Elapsed.TotalSeconds.ToString("F4")} seconds - json tag is missing", cancellationToken); // TODO Remove
             return null;
         }
         var jsonContent = match.Groups[1].Value;
         try
         {
             var responseDto = JsonSerializer.Deserialize<IEnumerable<LlmResponseDto.ResultDto>>(jsonContent, Constants.ChatJsonOptions);
-            await LogAsync($"{model} successed - {Clock.Elapsed.TotalSeconds:0.####} seconds", cancellationToken); // TODO Remove
+            await LogAsync($"{model} successed - {Clock.Elapsed.TotalSeconds.ToString("F4")} seconds", cancellationToken); // TODO Remove
             return new LlmResponseDto
             {
                 Results = responseDto!
@@ -195,7 +195,7 @@ internal class ProjectAnalyzer
         }
         catch (Exception e)
         {
-            await LogAsync($"{model} failed - {Clock.Elapsed.TotalSeconds:0.####} seconds - {e.Message}", cancellationToken); // TODO Remove
+            await LogAsync($"{model} failed - {Clock.Elapsed.TotalSeconds.ToString("F4")} seconds - {e.Message}", cancellationToken); // TODO Remove
             return null;
         }
     }
