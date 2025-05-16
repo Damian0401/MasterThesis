@@ -12,13 +12,17 @@ internal class ConsoleHelper
         ["-t"] = Arg.Token,
         ["--output"] = Arg.Output,
         ["-o"] = Arg.Output,
+        ["-i"] = Arg.Issues,
+        ["--issues"] = Arg.Issues,
+        ["-hs"] = Arg.Hotspots,
+        ["--hotspots"] = Arg.Hotspots,
     };
     private static readonly Arg[] RequiredArgs = [Arg.Host, Arg.Project, Arg.Token];
     private const string HelpArg = "--help";
     private const string HelpText = """
     Tool used to transform SonarQube report to SARIF format.
     Usage:
-      SonarQubeToSarif [--help] --host <host> --project <project> [--output <output_file>]
+      SonarQubeToSarif [--help] --host <host> --project <project> [--output <output_file>] [--issues <true|false>] [--hotspots <true|false>]
 
     Arguments:
       --help           Display help message.
@@ -26,6 +30,8 @@ internal class ConsoleHelper
       --project, -p    Specify the project to use.
       --token, -t      Specify the token to use for authentication.
       --output, -o     Specify the output file name (optional, default: output.sarif).
+      --issues, -i     Include issues in the output (optional, default: true).
+      --hotspots, -hs  Include hotspots in the output (optional, default: true).
     """;
     internal const string DefaultOutputFileName = "output.sarif";
     internal static bool TryParseArgs(string[] args, out IDictionary<Arg, string> parsedArgs)
@@ -72,5 +78,7 @@ internal class ConsoleHelper
         Project,
         Token,
         Output,
+        Issues,
+        Hotspots,
     }
 }

@@ -20,6 +20,8 @@ internal static class SonarQubeParser
         string project,
         string token,
         string outputFileName,
+        bool includeIssues,
+        bool includeHotspots,
         CancellationToken cancellationToken = default)
     {
         using var httpClient = CreateHttpClient(host, token);
@@ -27,17 +29,155 @@ internal static class SonarQubeParser
         {
             PropertyNameCaseInsensitive = true,
         };
-        var hotspotsQueryParam = $"?project={project}";
-        var hotspots = await httpClient.GetFromJsonAsync<HotspotsDto>(HotspotsUrl + hotspotsQueryParam, options, cancellationToken);
-        ArgumentNullException.ThrowIfNull(hotspots, nameof(HotspotsDto));
+        List<SarifDto.RuleDto> ruleDetails = [];
+        List<SarifDto.ResultDto> results = [];
+
+        if (includeIssues)
+        {
+            var issuesResults = await GetIssuesAsync(project, httpClient, options, ruleDetails, cancellationToken);
+            results.AddRange(issuesResults);
+        }
+
+        if (includeHotspots)
+        {
+            var hotspotsResults = await GetHotspotsAsync(project, httpClient, options, ruleDetails, cancellationToken);
+            results.AddRange(hotspotsResults);
+        }
+
+        var sarif = new SarifDto
+        {
+            Schema = SarifSchema,
+            Version = SarifVersion,
+            Runs =
+            [
+                new()
+                {
+                    Tool = new()
+                    {
+                        Driver = new()
+                        {
+                            Name = "SonarQube",
+                            SemanticVersion = "1.0.0",
+                            Version = "1.0.0",
+                            InformationUri = $"{host}/coding_rules",
+                            Rules = ruleDetails
+                        }
+                    },
+                    Results = results,
+                }
+            ]
+        };
+        var content = JsonSerializer.Serialize(sarif, new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+        });
+        await File.WriteAllTextAsync(outputFileName, content, cancellationToken);
+    }
+
+    private static async Task<IEnumerable<SarifDto.ResultDto>> GetIssuesAsync(
+        string project,
+        HttpClient httpClient,
+        JsonSerializerOptions options,
+        List<SarifDto.RuleDto> ruleDetails,
+        CancellationToken cancellationToken)
+    {
         var issuesQueryParam = $"?componentKeys={project}";
         var issues = await httpClient.GetFromJsonAsync<IssuesDto>(IssuesUrl + issuesQueryParam, options, cancellationToken);
         ArgumentNullException.ThrowIfNull(issues, nameof(IssuesDto));
-        
-        var hotspotsRules = hotspots.Hotspots.Select(h => h.RuleKey).ToList();
-        var issuesRules = issues.Issues.Select(i => i.Rule).ToList();
-        var rules = hotspotsRules.Union(issuesRules).Distinct().ToList();
+        var issuesRules = issues.Issues.Select(i => i.Rule).Distinct().ToList();
+        var issueRuleDetails = await GetRuleDetailsAsync(httpClient, issuesRules, cancellationToken);
+        ruleDetails.AddRange(issueRuleDetails);
+        var ruleDetailsDictionary = issueRuleDetails.ToDictionary(x => x.Id);
+        var issuesComponents = issues.Components.ToDictionary(x => x.Key);
+        var issuesResults = issues.Issues.Select(i => new SarifDto.ResultDto
+        {
+            RuleId = i.Rule,
+            RuleIndex = ruleDetails.IndexOf(ruleDetailsDictionary[i.Rule]),
+            Level = GetRuleSeverity(i.Severity),
+            Message = new()
+            {
+                Text = i.Message
+            },
+            Locations = [
+                new()
+                    {
+                        PhysicalLocation = new()
+                        {
+                            ArtifactLocation = new()
+                            {
+                                Uri = issuesComponents[i.Component].Path ?? issuesComponents[i.Component].Key,
+                                UriBaseId = "solutionDir"
+                            },
+                            Region = new()
+                            {
+                                StartLine = i.TextRange.StartLine + 1,
+                                EndLine = i.TextRange.EndLine + 1,
+                                StartColumn = i.TextRange.StartOffset + 1,
+                                EndColumn = i.TextRange.EndOffset + 1
+                            }
+                        }
+                    }
+            ]
+        });
+        return issuesResults;
+    }
 
+    private static async Task<IEnumerable<SarifDto.ResultDto>> GetHotspotsAsync(
+        string project,
+        HttpClient httpClient,
+        JsonSerializerOptions options,
+        List<SarifDto.RuleDto> ruleDetails,
+        CancellationToken cancellationToken)
+    {
+        var hotspotsQueryParam = $"?project={project}";
+        var hotspots = await httpClient.GetFromJsonAsync<HotspotsDto>(HotspotsUrl + hotspotsQueryParam, options, cancellationToken);
+        ArgumentNullException.ThrowIfNull(hotspots, nameof(HotspotsDto));
+        var hotspotsRules = hotspots.Hotspots.Select(h => h.RuleKey).Distinct().ToList();
+        var hotspotsRuleDetails = await GetRuleDetailsAsync(httpClient, hotspotsRules, cancellationToken);
+        ruleDetails.AddRange(hotspotsRuleDetails);
+        var ruleDetailsDictionary = hotspotsRuleDetails.ToDictionary(x => x.Id);
+        var hotspotsComponents = hotspots.Components.ToDictionary(x => x.Key);
+        var hotspotsResults = hotspots.Hotspots.Select(h => new SarifDto.ResultDto
+        {
+            RuleId = h.RuleKey,
+            RuleIndex = ruleDetails.IndexOf(ruleDetailsDictionary[h.RuleKey]),
+            Level = GetRuleSeverity(h.VulnerabilityProbability),
+            Message = new()
+            {
+                Text = h.Message
+            },
+            Locations = [
+                new()
+                    {
+                        PhysicalLocation = new()
+                        {
+                            ArtifactLocation = new()
+                            {
+                                Uri = hotspotsComponents[h.Component].Path ?? hotspotsComponents[h.Component].Key,
+                                UriBaseId = "solutionDir"
+                            },
+                            Region = new()
+                            {
+                                StartLine = h.TextRange.StartLine,
+                                EndLine = h.TextRange.EndLine,
+                                StartColumn = h.TextRange.StartOffset,
+                                EndColumn = h.TextRange.EndOffset
+                            }
+                        }
+                    }
+            ]
+        });
+        return hotspotsResults;
+    }
+
+    private static async Task<List<SarifDto.RuleDto>> GetRuleDetailsAsync(
+        HttpClient httpClient,
+        ICollection<string> rules,
+        CancellationToken cancellationToken)
+    {
         var ruleDetails = new List<SarifDto.RuleDto>();
         foreach (var rule in rules)
         {
@@ -68,103 +208,8 @@ internal static class SonarQubeParser
             };
             ruleDetails.Add(ruleDto);
         }
-        var ruleDetailsDictionary = ruleDetails.ToDictionary(x => x.Id);
 
-        var issuesComponents = issues.Components.ToDictionary(x => x.Key);
-        var issuesList = issues.Issues.Select(i => new SarifDto.ResultDto
-        {
-            RuleId = i.Rule,
-            RuleIndex = ruleDetails.IndexOf(ruleDetailsDictionary[i.Rule]),
-            Level = GetRuleSeverity(i.Severity),
-            Message = new()
-            {
-                Text = i.Message
-            },
-            Locations = [
-                new()
-                {
-                    PhysicalLocation = new()
-                    {
-                        ArtifactLocation = new()
-                        {
-                            Uri = issuesComponents[i.Component].Path ?? issuesComponents[i.Component].Key,
-                            UriBaseId = "solutionDir"
-                        },
-                        Region = new()
-                        {
-                            StartLine = i.TextRange.StartLine + 1,
-                            EndLine = i.TextRange.EndLine + 1,
-                            StartColumn = i.TextRange.StartOffset + 1,
-                            EndColumn = i.TextRange.EndOffset + 1
-                        }
-                    }
-                }
-            ]
-        }).ToList();
-
-        var hotspotsComponents = hotspots.Components.ToDictionary(x => x.Key);
-        var hotspotsList = hotspots.Hotspots.Select(h => new SarifDto.ResultDto
-        {
-            RuleId = h.RuleKey,
-            RuleIndex = ruleDetails.IndexOf(ruleDetailsDictionary[h.RuleKey]),
-            Level = GetRuleSeverity(h.VulnerabilityProbability),
-            Message = new()
-            {
-                Text = h.Message
-            },
-            Locations = [
-                new()
-                {
-                    PhysicalLocation = new()
-                    {
-                        ArtifactLocation = new()
-                        {
-                            Uri = hotspotsComponents[h.Component].Path ?? hotspotsComponents[h.Component].Key,
-                            UriBaseId = "solutionDir"
-                        },
-                        Region = new()
-                        {
-                            StartLine = h.TextRange.StartLine,
-                            EndLine = h.TextRange.EndLine,
-                            StartColumn = h.TextRange.StartOffset,
-                            EndColumn = h.TextRange.EndOffset
-                        }
-                    }
-                }
-            ]
-        }).ToList();
-
-        var sarif = new SarifDto
-        {
-            Schema = SarifSchema,
-            Version = SarifVersion,
-            Runs =
-            [
-                new()
-                {
-                    Tool = new()
-                    {
-                        Driver = new()
-                        {
-                            Name = "SonarQube",
-                            SemanticVersion = "1.0.0",
-                            Version = "1.0.0",
-                            InformationUri = $"{host}/coding_rules",
-                            Rules = ruleDetails
-                        }
-                    },
-                    Results = [..issuesList.Concat(hotspotsList)],
-                }
-            ]
-        };
-        var content = JsonSerializer.Serialize(sarif, new JsonSerializerOptions() 
-            { 
-                WriteIndented = true, 
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
-            });
-        await File.WriteAllTextAsync(outputFileName, content, cancellationToken);
+        return ruleDetails;
     }
 
     private static HttpClient CreateHttpClient(string host, string token)
