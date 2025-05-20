@@ -1,17 +1,21 @@
-param(
-    [string]$configPath
-)
+$startTime = Get-Date
 
 New-Item -ItemType Directory -Force -Path '.sarif' | Out-Null
-$config = Import-PowerShellDataFile -Path $configPath
-if (Test-Path $config.CODEQL_DATABASE_NAME)
+
+if (Test-Path .codeql)
 {
-    rm -r $config.CODEQL_DATABASE_NAME
+    rm -r .codeql
 }
+
 dotnet clean
-codeql database create $config.CODEQL_DATABASE_NAME --command "dotnet build" --language=csharp
-codeql database analyze $config.CODEQL_DATABASE_NAME `
+codeql database create .codeql --command "dotnet build" --language=csharp
+codeql database analyze .codeql `
 	--format=sarif-latest `
 	--output=.sarif/codeql-result.sarif `
 	--ram=4096 `
 	csharp-security-extended.qls
+
+$endTime = Get-Date
+$duration = $endTime - $startTime
+$logEntry = "CodeQL - Duration: $($duration.ToString())"
+Add-Content -Path "logs.txt" -Value $logEntry
