@@ -59,12 +59,13 @@ def generate_csv_report(sarif_dir):
                 'endLine': res['endLine'],
                 'startColumn': res['startColumn'],
                 'endColumn': res['endColumn'],
+                'isCorrect': ''
             })
 
     output_path = os.path.join(sarif_dir, 'sarif_report.csv')
     with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['SARIF File', 'Driver Name', 'Total Results', 'ruleId', 'message',
-                      'startLine', 'endLine', 'startColumn', 'endColumn']
+                      'startLine', 'endLine', 'startColumn', 'endColumn', 'isCorrect']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(report_rows)
@@ -127,7 +128,7 @@ def generate_summary_report(base_dir):
 
             for tool_name, count in tool_counts.items():
                 tool_counts_total[tool_name] = tool_counts_total.get(tool_name, 0) + count
-                if sarif_file == "llm-result.sarif":
+                if sarif_file == "llms-result.sarif":
                     all_llm_tools.add(tool_name)
                 else:
                     all_sast_tools.add(tool_name)
@@ -149,12 +150,12 @@ def generate_summary_report(base_dir):
 
         for tool in all_sast_tools:
             count = data["tools"].get(tool, 0)
-            row_full += [count, "", "", "", ""]
+            row_full += ["", count, "", "", "", "", "", ""]
             row_short += [count]
 
         for tool in all_llm_tools:
             count = data["tools"].get(tool, 0)
-            row_full += [count, "", "", "", ""]
+            row_full += ["", count, "", "", "", "", "", ""]
             row_short += [count]
 
         row_full += [""]
@@ -163,18 +164,18 @@ def generate_summary_report(base_dir):
         data_rows_short.append(row_short)
 
     header_row_1_full = ["Project", "NumberOfCharacters"]
-    header_row_1_full += ["NumberOfVulnerabilitiesSAST"] * (len(all_sast_tools) * 5)
-    header_row_1_full += ["NumberOfVulnerabilitiesLLM"] * (len(all_llm_tools) * 5)
+    header_row_1_full += ["SAST"] * (len(all_sast_tools) * 8)
+    header_row_1_full += ["LLM"] * (len(all_llm_tools) * 8)
     header_row_1_full += ["TotalVulnerabilities"]
 
     header_row_2_full = ["", ""]
     for tool in all_sast_tools + all_llm_tools:
-        header_row_2_full += [tool] * 5
+        header_row_2_full += [tool] * 8
     header_row_2_full += [""]
 
     header_row_3_full = ["", ""]
     for _ in all_sast_tools + all_llm_tools:
-        header_row_3_full += ["Count", "TP", "FP", "FN", "TN"]
+        header_row_3_full += ["Total", "Count", "TP", "FP", "FN", "Precision", "Recall", "F1"]
     header_row_3_full += [""]
 
     full_output_path = os.path.join(base_dir, 'summary_sarif_report_full.csv')
@@ -188,8 +189,8 @@ def generate_summary_report(base_dir):
     print(f"Full summary report generated at: {full_output_path}")
 
     header_row_1_short = ["Project", "NumberOfCharacters"]
-    header_row_1_short += ["NumberOfVulnerabilities - SAST"] * len(all_sast_tools)
-    header_row_1_short += ["NumberOfVulnerabilities - LLM"] * len(all_llm_tools)
+    header_row_1_short += ["SAST"] * len(all_sast_tools)
+    header_row_1_short += ["LLM"] * len(all_llm_tools)
 
     header_row_2_short = ["", ""]
     header_row_2_short += all_sast_tools
