@@ -18,11 +18,13 @@ def extract_sarif_data(file_path):
             rule_id = result.get('ruleId', '')
             message = result.get('message', {}).get('text', '')
             location = result.get('locations', [{}])[0].get('physicalLocation', {}).get('region', {})
+            path = result.get('locations', [{}])[0].get('physicalLocation', {}).get('artifactLocation', {}).get('uri', '')
 
             result_list.append({
                 'Driver Name': driver_name,
                 'ruleId': rule_id,
                 'message': message,
+                'path': path,
                 'startLine': location.get('startLine', ''),
                 'endLine': location.get('endLine', ''),
                 'startColumn': location.get('startColumn', ''),
@@ -55,6 +57,7 @@ def generate_csv_report(sarif_dir):
                 'Total Results': result_count,
                 'ruleId': res['ruleId'],
                 'message': res['message'],
+                'path': res['path'],
                 'startLine': res['startLine'],
                 'endLine': res['endLine'],
                 'startColumn': res['startColumn'],
@@ -64,7 +67,7 @@ def generate_csv_report(sarif_dir):
 
     output_path = os.path.join(sarif_dir, 'sarif_report.csv')
     with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['SARIF File', 'Driver Name', 'Total Results', 'ruleId', 'message',
+        fieldnames = ['SARIF File', 'Driver Name', 'Total Results', 'ruleId', 'message', 'path',
                       'startLine', 'endLine', 'startColumn', 'endColumn', 'isCorrect']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -145,38 +148,33 @@ def generate_summary_report(base_dir):
     data_rows_short = []
 
     for project, data in project_data.items():
-        row_full = [project, data["NumberOfCharacters"]]
+        row_full = [project, data["NumberOfCharacters"], ""]
         row_short = [project, data["NumberOfCharacters"]]
 
         for tool in all_sast_tools:
             count = data["tools"].get(tool, 0)
-            row_full += ["", count, "", "", "", "", "", ""]
+            row_full += [count, "", "", "", "", "", ""]
             row_short += [count]
 
         for tool in all_llm_tools:
             count = data["tools"].get(tool, 0)
-            row_full += ["", count, "", "", "", "", "", ""]
+            row_full += [count, "", "", "", "", "", ""]
             row_short += [count]
-
-        row_full += [""]
 
         data_rows_full.append(row_full)
         data_rows_short.append(row_short)
 
-    header_row_1_full = ["Project", "NumberOfCharacters"]
-    header_row_1_full += ["SAST"] * (len(all_sast_tools) * 8)
-    header_row_1_full += ["LLM"] * (len(all_llm_tools) * 8)
-    header_row_1_full += ["TotalVulnerabilities"]
+    header_row_1_full = ["Project", "NumberOfCharacters", "TotalVulnerabilities"]
+    header_row_1_full += ["SAST"] * (len(all_sast_tools) * 7)
+    header_row_1_full += ["LLM"] * (len(all_llm_tools) * 7)
 
-    header_row_2_full = ["", ""]
+    header_row_2_full = ["", "", ""]
     for tool in all_sast_tools + all_llm_tools:
-        header_row_2_full += [tool] * 8
-    header_row_2_full += [""]
+        header_row_2_full += [tool] * 7
 
-    header_row_3_full = ["", ""]
+    header_row_3_full = ["", "", ""]
     for _ in all_sast_tools + all_llm_tools:
-        header_row_3_full += ["Total", "Count", "TP", "FP", "FN", "Precision", "Recall", "F1"]
-    header_row_3_full += [""]
+        header_row_3_full += ["Count", "TP", "FP", "FN", "Precision", "Recall", "F1"]
 
     full_output_path = os.path.join(base_dir, 'summary_sarif_report_full.csv')
     with open(full_output_path, 'w', newline='', encoding='utf-8') as f:
