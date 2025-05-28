@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "SonarQube",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "http://localhost:5050/coding_rules",
+          "rules": [
+            {
+              "id": "csharpsquid:S2068",
+              "shortDescription": {
+                "text": "Hard-coded credentials are security-sensitive"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": "<h2>Recommended Secure Coding Practices</h2>\n<ul>\n  <li> Store the credentials in a configuration file that is not pushed to the code repository. </li>\n  <li> Store the credentials in a database. </li>\n  <li> Use your cloud provider’s service for managing secrets. </li>\n  <li> If a password has been disclosed through the source code: change it. </li>\n</ul>\n<h2>Compliant Solution</h2>\n<pre>\nstring username = \"admin\";\nstring password = GetEncryptedPassword();\nstring usernamePassword = string.Format(\"user={0}&amp;password={1}\", GetEncryptedUsername(), GetEncryptedPassword());\nstring url = $\"scheme://{username}:{password}@domain.com\";\n\nstring url2 = \"http://guest:guest@domain.com\"; // Compliant\nconst string Password_Property = \"custom.password\"; // Compliant\n</pre>\n<h2>See</h2>\n<ul>\n  <li> OWASP - <a href=\"https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/\">Top 10 2021 Category A7 - Identification and\n  Authentication Failures</a> </li>\n  <li> OWASP - <a href=\"https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication\">Top 10 2017 Category A2 - Broken Authentication</a>\n  </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/798\">CWE-798 - Use of Hard-coded Credentials</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/259\">CWE-259 - Use of Hard-coded Password</a> </li>\n  <li> Derived from FindSecBugs rule <a href=\"https://h3xstream.github.io/find-sec-bugs/bugs.htm#HARD_CODE_PASSWORD\">Hard Coded Password</a> </li>\n</ul>"
+              },
+              "properties": {
+                "tags": [
+                  "cwe"
+                ],
+                "categories": [
+                  "SECURITY_HOTSPOT"
+                ]
+              }
+            },
+            {
+              "id": "csharpsquid:S2077",
+              "shortDescription": {
+                "text": "Formatting SQL queries is security-sensitive"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": "<h2>Recommended Secure Coding Practices</h2>\n<ul>\n  <li> Use <a href=\"https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html\">parameterized queries, prepared\n  statements, or stored procedures</a> and bind variables to SQL query parameters. </li>\n  <li> Consider using ORM frameworks if there is a need to have an abstract layer to access data. </li>\n</ul>\n<h2>Compliant Solution</h2>\n<pre>\npublic void Foo(DbContext context, string query, string param)\n{\n    context.Database.ExecuteSqlCommand(\"SELECT * FROM mytable WHERE mycol=@p0\", param); // Compliant, it's a parametrized safe query\n}\n</pre>\n<h2>See</h2>\n<ul>\n  <li> OWASP - <a href=\"https://owasp.org/Top10/A03_2021-Injection/\">Top 10 2021 Category A3 - Injection</a> </li>\n  <li> OWASP - <a href=\"https://owasp.org/www-project-top-ten/2017/A1_2017-Injection\">Top 10 2017 Category A1 - Injection</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/20\">CWE-20 - Improper Input Validation</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/89\">CWE-89 - Improper Neutralization of Special Elements used in an SQL Command</a> </li>\n  <li> Derived from FindSecBugs rules <a href=\"https://h3xstream.github.io/find-sec-bugs/bugs.htm#SQL_INJECTION_JPA\">Potential SQL/JPQL Injection\n  (JPA)</a>, <a href=\"https://h3xstream.github.io/find-sec-bugs/bugs.htm#SQL_INJECTION_JDO\">Potential SQL/JDOQL Injection (JDO)</a>, <a\n  href=\"https://h3xstream.github.io/find-sec-bugs/bugs.htm#SQL_INJECTION_HIBERNATE\">Potential SQL/HQL Injection (Hibernate)</a> </li>\n</ul>"
+              },
+              "properties": {
+                "tags": [
+                  "cwe",
+                  "bad-practice",
+                  "sql"
+                ],
+                "categories": [
+                  "SECURITY_HOTSPOT"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "csharpsquid:S2068",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "\"password\" detected here, make sure this is not a hard-coded credential."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 11,
+                  "endLine": 11,
+                  "startColumn": 4,
+                  "endColumn": 37
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "csharpsquid:S2077",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Make sure using a dynamically formatted SQL query is safe here."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 35,
+                  "endLine": 35,
+                  "startColumn": 4,
+                  "endColumn": 24
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

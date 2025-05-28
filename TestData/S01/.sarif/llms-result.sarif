@@ -1,0 +1,1446 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQL_INJECTION",
+              "shortDescription": {
+                "text": "Do not use user input directly in SQL queries to prevent SQL injection."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_DESERIALIZATION",
+              "shortDescription": {
+                "text": "Validating untrusted data before deserialization is important to prevent security risks."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_CRYPTOGRAPHY_DES_KEY",
+              "shortDescription": {
+                "text": "Hardcoded, weak or short cryptographic keys are insecure."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "HARDCODED_SECRET_JWT",
+              "shortDescription": {
+                "text": "Do not hardcode secrets, API keys, or cryptographic keys in source code."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded Credentials"
+                ]
+              }
+            },
+            {
+              "id": "HARDCODED_DB_CREDENTIALS",
+              "shortDescription": {
+                "text": "Do not hardcode database credentials in source code."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded Credentials"
+                ]
+              }
+            },
+            {
+              "id": "HARDCODED_API_KEY",
+              "shortDescription": {
+                "text": "Do not hardcode API keys in source code."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded Credentials"
+                ]
+              }
+            },
+            {
+              "id": "COMMAND_INJECTION",
+              "shortDescription": {
+                "text": "Avoid using dynamic user input directly in command execution."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Command Injection"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_FILE_UPLOAD",
+              "shortDescription": {
+                "text": "Validate file uploads to prevent path traversal and unrestricted file upload risks."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure File Handling"
+                ]
+              }
+            },
+            {
+              "id": "DEBUG_INFORMATION_LEAK",
+              "shortDescription": {
+                "text": "Do not expose sensitive environment variables over HTTP."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Information Disclosure"
+                ]
+              }
+            },
+            {
+              "id": "MISSING_AUTHORIZATION",
+              "shortDescription": {
+                "text": "Sensitive endpoints must require authentication and authorization."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication/Authorization"
+                ]
+              }
+            },
+            {
+              "id": "USE_OF_WEAK_CRYPTO_ALGORITHM",
+              "shortDescription": {
+                "text": "Avoid weak cryptographic algorithms such as DES."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "OUTDATED_LIBRARY",
+              "shortDescription": {
+                "text": "Ensure libraries are up-to-date to avoid known vulnerabilities."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Use of Outdated Library"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQL_INJECTION",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Potential SQL Injection vulnerability: User input 'id' is used directly in the SQL command string without parameterization."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 23,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQL_INJECTION",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Potential SQL Injection vulnerability: User input 'id' is used directly in the SQL command string without parameterization."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 50,
+                  "endLine": 78,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_DESERIALIZATION",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "Untrusted input is deserialized directly by JsonSerializer.Deserialize, which can introduce security issues if the input is not trusted or validated."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 11,
+                  "endLine": 14,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_CRYPTOGRAPHY_DES_KEY",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Symmetric encryption uses hardcoded, short DES key ('12345678'). DES is considered weak and should not be used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 16,
+                  "endLine": 26,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HARDCODED_SECRET_JWT",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "A hardcoded value is used for 'jwtSecretKey' which may expose application secrets."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 9,
+                  "startColumn": 1,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HARDCODED_DB_CREDENTIALS",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Database connection string contains hardcoded credentials."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 7,
+                  "endLine": 7,
+                  "startColumn": 1,
+                  "endColumn": 90
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HARDCODED_API_KEY",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "openAiApiKey is hardcoded in the source code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 8,
+                  "startColumn": 1,
+                  "endColumn": 62
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "COMMAND_INJECTION",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "The 'ExecuteCommand' method takes dynamic 'command' input to construct OS commands. This allows arbitrary command execution if user input is not validated."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 28,
+                  "endLine": 36,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_FILE_UPLOAD",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "File uploads are saved using file.FileName without sanitization or validation, allowing potential path traversal (e.g., '../')."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 34,
+                  "endLine": 42,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "DEBUG_INFORMATION_LEAK",
+          "ruleIndex": 8,
+          "level": "error",
+          "message": {
+            "text": "The '/debug' endpoint exposes all environment variables, which may include sensitive secrets."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 44,
+                  "endLine": 47,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "MISSING_AUTHORIZATION",
+          "ruleIndex": 9,
+          "level": "error",
+          "message": {
+            "text": "The '/admin' endpoint does not require authentication or authorization and exposes sensitive content."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 49,
+                  "endLine": 52,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "USE_OF_WEAK_CRYPTO_ALGORITHM",
+          "ruleIndex": 10,
+          "level": "error",
+          "message": {
+            "text": "The EncryptData method uses the insecure DES algorithm for symmetric encryption."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 16,
+                  "endLine": 26,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "OUTDATED_LIBRARY",
+          "ruleIndex": 11,
+          "level": "warning",
+          "message": {
+            "text": "The referenced System.Data.SqlClient is version 4.9.0, which is outdated and may contain known vulnerabilities. Update to the latest stable release."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "S01.csproj",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 10,
+                  "startColumn": 5,
+                  "endColumn": 73
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQLI-001",
+              "shortDescription": {
+                "text": "SQL Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "SQLI-002",
+              "shortDescription": {
+                "text": "SQL Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "CRYPTO-001",
+              "shortDescription": {
+                "text": "Insecure use of cryptography"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "CRYPTO-002",
+              "shortDescription": {
+                "text": "Insecure use of cryptography"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "SECRET-001",
+              "shortDescription": {
+                "text": "Hardcoded credentials"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Credentials"
+                ]
+              }
+            },
+            {
+              "id": "SECRET-002",
+              "shortDescription": {
+                "text": "Hardcoded API key"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Credentials"
+                ]
+              }
+            },
+            {
+              "id": "CMD-001",
+              "shortDescription": {
+                "text": "Command Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Command Injection"
+                ]
+              }
+            },
+            {
+              "id": "FILE-001",
+              "shortDescription": {
+                "text": "Insecure file upload"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            },
+            {
+              "id": "AUTH-001",
+              "shortDescription": {
+                "text": "Missing authentication"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "DESER-001",
+              "shortDescription": {
+                "text": "Insecure deserialization"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "INFO-001",
+              "shortDescription": {
+                "text": "Information exposure"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Information Disclosure"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQLI-001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "SQL query is built using string concatenation with user input, making it vulnerable to SQL injection."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 20,
+                  "startColumn": 17,
+                  "endColumn": 77
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLI-002",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "SQL query is built using string concatenation with user input in JWT generation endpoint."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 80,
+                  "endLine": 80,
+                  "startColumn": 17,
+                  "endColumn": 77
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CRYPTO-001",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "DES encryption is used with a hardcoded weak key (12345678). DES is considered insecure and should not be used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 15,
+                  "startColumn": 17,
+                  "endColumn": 48
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CRYPTO-002",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "JWT uses a weak secret key (secretkey123) which is hardcoded in the source code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 15,
+                  "startColumn": 1,
+                  "endColumn": 30
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SECRET-001",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Database connection string with credentials is hardcoded in the source code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 12,
+                  "startColumn": 1,
+                  "endColumn": 80
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SECRET-002",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "OpenAI API key is hardcoded in the source code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 13,
+                  "startColumn": 1,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CMD-001",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "Process.Start() is called with user-controlled input without proper validation/sanitization."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 30,
+                  "endLine": 30,
+                  "startColumn": 9,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FILE-001",
+          "ruleIndex": 7,
+          "level": "warning",
+          "message": {
+            "text": "File upload endpoint accepts any file without validation of file type or content, which could lead to malicious file uploads."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 50,
+                  "endLine": 50,
+                  "startColumn": 1,
+                  "endColumn": 20
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "AUTH-001",
+          "ruleIndex": 8,
+          "level": "error",
+          "message": {
+            "text": "Admin endpoint is accessible without any authentication mechanism."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 65,
+                  "endLine": 65,
+                  "startColumn": 1,
+                  "endColumn": 20
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "DESER-001",
+          "ruleIndex": 9,
+          "level": "warning",
+          "message": {
+            "text": "JsonSerializer.Deserialize<dynamic>() is used which could be dangerous if the input is attacker-controlled."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 10,
+                  "startColumn": 9,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INFO-001",
+          "ruleIndex": 10,
+          "level": "warning",
+          "message": {
+            "text": "Debug endpoint exposes all environment variables which may contain sensitive information."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 60,
+                  "endLine": 60,
+                  "startColumn": 1,
+                  "endColumn": 20
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQLInjection",
+              "shortDescription": {
+                "text": "Potential SQL Injection risk"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQLInjection"
+                ]
+              }
+            },
+            {
+              "id": "CommandInjection",
+              "shortDescription": {
+                "text": "Potential Command Injection risk"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "CommandInjection"
+                ]
+              }
+            },
+            {
+              "id": "HardcodedCredentials",
+              "shortDescription": {
+                "text": "Hardcoded credentials found"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "HardcodedCredentials"
+                ]
+              }
+            },
+            {
+              "id": "InsecureDeserialization",
+              "shortDescription": {
+                "text": "Potential Insecure Deserialization risk"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "InsecureDeserialization"
+                ]
+              }
+            },
+            {
+              "id": "WeakEncryption",
+              "shortDescription": {
+                "text": "Weak encryption algorithm used"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "PathTraversal",
+              "shortDescription": {
+                "text": "Potential Path Traversal risk"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "PathTraversal"
+                ]
+              }
+            },
+            {
+              "id": "SensitiveDataExposure",
+              "shortDescription": {
+                "text": "Sensitive data exposure risk"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SensitiveDataExposure"
+                ]
+              }
+            },
+            {
+              "id": "InsecureAuthentication",
+              "shortDescription": {
+                "text": "Insecure or missing authentication/authorization mechanisms"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQLInjection",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "The SQL query is constructed using unsanitized user input, which makes it vulnerable to SQL Injection attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 28,
+                  "endLine": 28,
+                  "startColumn": 30,
+                  "endColumn": 65
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLInjection",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "The SQL query is constructed using unsanitized user input, which makes it vulnerable to SQL Injection attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 80,
+                  "endLine": 80,
+                  "startColumn": 30,
+                  "endColumn": 65
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CommandInjection",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "The command is constructed using unsanitized user input, which makes it vulnerable to Command Injection attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 29,
+                  "endLine": 29,
+                  "startColumn": 21,
+                  "endColumn": 36
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HardcodedCredentials",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Database credentials are hardcoded in the source code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 12,
+                  "startColumn": 12,
+                  "endColumn": 78
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HardcodedCredentials",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "API key is hardcoded in the source code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 13,
+                  "startColumn": 12,
+                  "endColumn": 47
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HardcodedCredentials",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "JWT secret key is hardcoded in the source code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 14,
+                  "endLine": 14,
+                  "startColumn": 12,
+                  "endColumn": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureDeserialization",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "Deserialization of untrusted data can lead to security vulnerabilities."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 12,
+                  "startColumn": 23,
+                  "endColumn": 66
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "WeakEncryption",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "DES encryption algorithm is weak and should not be used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HelperService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 17,
+                  "endLine": 17,
+                  "startColumn": 13,
+                  "endColumn": 24
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "PathTraversal",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "Unrestricted file uploads can lead to path traversal vulnerabilities."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 61,
+                  "endLine": 61,
+                  "startColumn": 20,
+                  "endColumn": 47
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SensitiveDataExposure",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "Exposing environment variables can lead to sensitive data exposure."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 73,
+                  "endLine": 73,
+                  "startColumn": 20,
+                  "endColumn": 66
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureAuthentication",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "No authentication/authorization mechanism is enforced for accessing sensitive data."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 87,
+                  "endLine": 87,
+                  "startColumn": 17,
+                  "endColumn": 69
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

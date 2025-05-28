@@ -1,0 +1,58 @@
+SARIF File,Driver Name,Total Results,ruleId,message,path,startLine,endLine,startColumn,endColumn,isCorrect
+codeql-result.sarif,CodeQL,5,cs/path-injection,This path depends on a [user-provided value](1).,Utils.cs,13,,27,35,1
+codeql-result.sarif,CodeQL,5,cs/command-line-injection,This command line depends on a [user-provided value](1).,InventoryService.cs,32,,57,68,1
+codeql-result.sarif,CodeQL,5,cs/user-controlled-bypass,"This condition guards a sensitive [action](1), but a [user-provided value](2) controls it.
+This condition guards a sensitive [action](1), but a [user-provided value](3) controls it.
+This condition guards a sensitive [action](1), but a [user-provided value](2) controls it.
+This condition guards a sensitive [action](1), but a [user-provided value](3) controls it.",AuthController.cs,10,,13,50,1
+codeql-result.sarif,CodeQL,5,cs/web/missing-function-level-access-control,This action is missing an authorization check.,InventoryController.cs,72,,26,36,1
+codeql-result.sarif,CodeQL,5,cs/web/insecure-direct-object-reference,This method may be missing authorization checks for which users can access the resource of the provided ID.,InventoryController.cs,72,,26,36,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-HARDCODE-CREDENTIALS,"Hardcoded username and password detected in SignIn method. This exposes static credentials that could be easily guessed, leading to unauthorized access.",AuthController.cs,8,13,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-HARDCODE-TOKEN,"Token generation in GetToken uses predictable pattern and static secret concatenation, allowing impersonation through token manipulation.",AuthController.cs,15,18,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-SQL-INJECTION,SQL query is constructed using untrusted input from parameter 'id'. This allows an attacker to inject arbitrary SQL.,InventoryController.cs,13,17,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-SQL-INJECTION,SQL query is constructed using untrusted input from parameter 'id'. This allows an attacker to inject arbitrary SQL commands.,InventoryController.cs,61,65,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-IMPROPER-AUTHZ,"AuthController and InventoryController have no authentication or authorization attributes or checks, exposing all methods publicly.",AuthController.cs,1,20,1,2,0
+llms-result.sarif,openai/gpt-4.1,15,SEC-IMPROPER-AUTHZ,"AuthController and InventoryController have no authentication or authorization attributes or checks, exposing all methods publicly.",InventoryController.cs,1,67,1,2,0
+llms-result.sarif,openai/gpt-4.1,15,SEC-UNRESTRICTED-FILE-UPLOAD,"Uploaded file path is not sanitized, and the file type or content is not checked. An attacker can upload files with dangerous names (such as ../../web.config) or executable content.",InventoryController.cs,19,24,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-XSS,"The Filter endpoint places the 'category' parameter directly into HTML output without encoding, allowing XSS attacks.",InventoryController.cs,26,29,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-DESERIALIZATION,"The AddItem endpoint deserializes user-controlled payload with Json.NET, which can lead to insecure deserialization attacks.",InventoryController.cs,31,35,9,10,0
+llms-result.sarif,openai/gpt-4.1,15,SEC-WEAK-CRYPTO,"WeakEncrypt uses DES, an outdated and insecure encryption algorithm, and a hardcoded key and IV. This allows encrypted data to be easily compromised.",InventoryService.cs,13,23,5,6,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-COMMAND-INJECTION,"RunSystemCommand method receives 'cmd' parameter and concatenates it into shell command, leading to command injection.",InventoryService.cs,25,31,5,6,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-COMMAND-INJECTION,The ExecuteCommand endpoint allows attackers to execute arbitrary system commands via the 'cmd' parameter.,InventoryController.cs,47,51,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-PATH-TRAVERSAL,"SaveNoteToFile endpoint uses filename from user input directly with File.WriteAllText, allowing path traversal and overwrite of arbitrary files.",InventoryController.cs,39,44,9,10,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-PATH-TRAVERSAL,"WriteContentToFile writes user-defined filenames directly to disk with no validation, allowing for path traversal and file overwrite.",Utils.cs,9,13,5,6,1
+llms-result.sarif,openai/gpt-4.1,15,SEC-DESERIALIZATION,"UnsafeDeserialize<T> relies on untrusted deserialization from JsonSerializer, which could introduce security risks if not properly constrained.",Utils.cs,5,8,5,6,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,HARDCODED_CREDENTIALS,Hardcoded credentials 'warehouse:1234' found in authentication logic,AuthController.cs,8,8,8,38,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,SQL_INJECTION,Concatenating user input directly into SQL query in GetItem method,InventoryController.cs,15,15,17,60,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,SQL_INJECTION,Concatenating user input directly into SQL query in DeleteItem method,InventoryController.cs,56,56,17,63,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,XSS,Unsanitized user input in HTML output in Filter method,InventoryController.cs,28,28,16,60,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,INSECURE_DESERIALIZATION,Unsafe deserialization of user-controlled data in AddItem method,InventoryController.cs,33,33,16,60,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,WEAK_CRYPTO,Using DES encryption with hardcoded key in WeakEncrypt method,InventoryService.cs,19,19,16,38,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,COMMAND_INJECTION,Unsanitized user input passed to system command in ExecuteCommand method,InventoryController.cs,45,45,16,50,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,UNRESTRICTED_FILE_UPLOAD,File upload without proper validation of file type or path in UploadImage method,InventoryController.cs,21,21,16,50,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,PATH_TRAVERSAL,Unsanitized user input used as file path in SaveNoteToFile method,InventoryController.cs,39,39,16,50,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,10,INSECURE_DESERIALIZATION,Unsafe deserialization method exposed in Utils class,Utils.cs,5,5,16,50,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,HardcodedCredentials,Hardcoded credentials found in the SignIn method.,AuthController.cs,9,11,13,29,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,SQLInjection,Potential SQL injection vulnerability in GetItem method.,InventoryController.cs,18,20,24,66,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,SQLInjection,Potential SQL injection vulnerability in DeleteItem method.,InventoryController.cs,61,63,24,64,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,XSS,Potential XSS vulnerability in Filter method.,InventoryController.cs,32,34,31,95,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,InsecureDeserialization,Potential insecure deserialization vulnerability in AddItem method.,InventoryController.cs,37,39,29,68,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,WeakCryptography,Weak encryption algorithm (DES) used in WeakEncrypt method.,InventoryService.cs,21,30,13,55,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,CommandInjection,Potential command injection vulnerability in ExecuteCommand method.,InventoryController.cs,46,48,29,63,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,InsecureFileHandling,Potential path traversal vulnerability in UploadImage method.,InventoryController.cs,23,27,24,70,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,9,InsecureFileHandling,Potential path traversal vulnerability in SaveNoteToFile method.,InventoryController.cs,53,55,31,70,1
+snyk-result.sarif,SnykCode,14,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,AuthController.cs,8,8,26,32,0
+snyk-result.sarif,SnykCode,14,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,AuthController.cs,18,18,26,34,0
+snyk-result.sarif,SnykCode,14,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,InventoryController.cs,23,23,26,37,1
+snyk-result.sarif,SnykCode,14,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,InventoryController.cs,38,38,26,33,0
+snyk-result.sarif,SnykCode,14,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,InventoryController.cs,52,52,26,40,1
+snyk-result.sarif,SnykCode,14,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,InventoryController.cs,72,72,26,36,0
+snyk-result.sarif,SnykCode,14,csharp/CommandInjection,"Unsanitized input from an HTTP parameter flows into global::System.Diagnostics.ProcessStartInfo, where it is used as a shell command. This may result in a Command Injection vulnerability.",InventoryController.cs,61,61,22,47,1
+snyk-result.sarif,SnykCode,14,csharp/InsecureCipher,The DES cipher is insecure. Consider using AES instead.,InventoryService.cs,21,21,25,35,1
+snyk-result.sarif,SnykCode,14,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found username or password credential used in a condition.,AuthController.cs,10,10,13,32,1
+snyk-result.sarif,SnykCode,14,csharp/PT,"Unsanitized input from an HTTP parameter flows into global::System.IO.File.Create, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.",InventoryController.cs,26,26,24,45,1
+snyk-result.sarif,SnykCode,14,csharp/PT,"Unsanitized input from an HTTP parameter flows into global::System.IO.File.WriteAllText, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.",InventoryController.cs,54,54,9,33,1
+snyk-result.sarif,SnykCode,14,csharp/Sqli,"Unsanitized input from an HTTP parameter flows into global::InventoryService.ExecuteQuery, where it is used in an SQL query. This may result in an SQL Injection vulnerability.",InventoryController.cs,19,19,19,40,1
+snyk-result.sarif,SnykCode,14,csharp/Sqli,"Unsanitized input from an HTTP parameter flows into global::InventoryService.ExecuteQuery, where it is used in an SQL query. This may result in an SQL Injection vulnerability.",InventoryController.cs,75,75,19,40,1
+snyk-result.sarif,SnykCode,14,csharp/XSS,Unsanitized input from an HTTP parameter flows into an HTTP response via global::Microsoft.AspNetCore.Mvc.ControllerBase.Content. This may result in an XSS vulnerability.,InventoryController.cs,34,34,16,23,1
+sonarqube-result.sarif,SonarQube,1,csharpsquid:S4036,"Make sure the ""PATH"" used to find this command includes only what you intend.",InventoryService.cs,32,35,24,9,1

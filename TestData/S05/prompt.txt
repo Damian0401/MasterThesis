@@ -1,0 +1,152 @@
+----- AppDbContext.cs
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
+public class AppDbContext : IdentityDbContext<IdentityUser>
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
+    {
+    }
+}
+
+----- Program.cs
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+var jwtExpireMinutes = int.Parse(builder.Configuration["Jwt:ExpireMinutes"]);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var adminUser = await userManager.FindByNameAsync("admin");
+    if (adminUser == null)
+    {
+        adminUser = new IdentityUser { UserName = "admin" };
+        await userManager.CreateAsync(adminUser, "Admin123!");
+    }
+}
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+// 1. Rejestracja
+app.MapPost("/register", async (UserManager<IdentityUser> userManager, RegisterRequest req) =>
+{
+    var user = new IdentityUser { UserName = req.Username };
+    var result = await userManager.CreateAsync(user, req.Password);
+
+    return result.Succeeded ? Results.Ok("User created") : Results.BadRequest(result.Errors);
+});
+
+// 2. Logowanie + JWT
+app.MapPost("/login", async (UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, LoginRequest req) =>
+{
+    var user = await userManager.FindByNameAsync(req.Username);
+    if (user == null || !await userManager.CheckPasswordAsync(user, req.Password))
+        return Results.Unauthorized();
+
+    var claims = new[]
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+    var token = new JwtSecurityToken(
+        issuer: jwtIssuer,
+        audience: jwtAudience,
+        claims: claims,
+        expires: DateTime.UtcNow.AddMinutes(jwtExpireMinutes),
+        signingCredentials: creds);
+
+    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+    return Results.Ok(new { token = tokenString });
+});
+
+// 3. Endpoint publiczny
+app.MapGet("/public", () => "This is a public endpoint");
+
+// 4. Endpoint zabezpieczony JWT
+app.MapGet("/secure", [Microsoft.AspNetCore.Authorization.Authorize] () => "This is a secure endpoint");
+
+// 5. Lista użytkowników (admin only in real-world)
+app.MapGet("/users", async (UserManager<IdentityUser> userManager) =>
+{
+    var users = userManager.Users.Select(u => u.UserName).ToList();
+    return Results.Ok(users);
+});
+
+// 6. Usuń konto (po nazwie)
+app.MapDelete("/users/{username}", async (string username, UserManager<IdentityUser> userManager) =>
+{
+    var user = await userManager.FindByNameAsync(username);
+    if (user == null) return Results.NotFound();
+    await userManager.DeleteAsync(user);
+    return Results.Ok("Deleted");
+});
+
+app.Run();
+
+// DTOs
+record RegisterRequest(string Username, string Password);
+record LoginRequest(string Username, string Password);
+----- S05.csproj
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+  </ItemGroup>
+</Project>
+
+-----

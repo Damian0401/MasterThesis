@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "SonarQube",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "http://localhost:5050/coding_rules",
+          "rules": [
+            {
+              "id": "csharpsquid:S4036",
+              "shortDescription": {
+                "text": "Searching OS commands in PATH is security-sensitive"
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "help": {
+                "text": "<h2>Recommended Secure Coding Practices</h2>\n<p>Fully qualified/absolute path should be used to specify the OS command to execute.</p>\n<h2>Compliant Solution</h2>\n<pre>\nProcess p = new Process();\np.StartInfo.FileName = @\"C:\\Apps\\binary.exe\"; // Compliant\n</pre>\n<h2>See</h2>\n<ul>\n  <li> OWASP - <a href=\"https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/\">Top 10 2021 Category A8 - Software and Data Integrity\n  Failures</a> </li>\n  <li> OWASP - <a href=\"https://owasp.org/www-project-top-ten/2017/A1_2017-Injection\">Top 10 2017 Category A1 - Injection</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/426\">CWE-426 - Untrusted Search Path</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/427\">CWE-427 - Uncontrolled Search Path Element</a> </li>\n</ul>"
+              },
+              "properties": {
+                "tags": [
+                  "cwe"
+                ],
+                "categories": [
+                  "SECURITY_HOTSPOT"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "csharpsquid:S4036",
+          "ruleIndex": 0,
+          "level": "note",
+          "message": {
+            "text": "Make sure the \"PATH\" used to find this command includes only what you intend."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 32,
+                  "endLine": 35,
+                  "startColumn": 24,
+                  "endColumn": 9
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

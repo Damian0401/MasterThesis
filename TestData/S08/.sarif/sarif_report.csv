@@ -1,0 +1,29 @@
+SARIF File,Driver Name,Total Results,ruleId,message,path,startLine,endLine,startColumn,endColumn,isCorrect
+codeql-result.sarif,CodeQL,1,cs/user-controlled-bypass,"This condition guards a sensitive [action](1), but a [user-provided value](2) controls it.
+This condition guards a sensitive [action](1), but a [user-provided value](3) controls it.",Controllers/UserController.cs,20,,13,58,0
+llms-result.sarif,openai/gpt-4.1,7,SQL001,"The GetTrackById method in MusicService constructs an SQL query by directly embedding the 'id' parameter from user input without any sanitization or use of parameterized queries, which can lead to SQL Injection attacks.",Services\MusicService.cs,8,10,5,66,1
+llms-result.sarif,openai/gpt-4.1,7,XSS001,"The Greet action in UserController directly includes the 'name' parameter from the user's query in an HTML response without any encoding or sanitization, enabling XSS attacks.",Controllers\UserController.cs,23,25,5,71,1
+llms-result.sarif,openai/gpt-4.1,7,AUTH001,"The Authenticate method in UserService uses hardcoded username and password ('admin' / 'pass123'), which is insecure and can easily be compromised.",Services\UserService.cs,6,9,5,61,1
+llms-result.sarif,openai/gpt-4.1,7,CRYPTO001,"The Encrypt method in CryptoHelper uses the DES algorithm, which is outdated and insecure, with a hardcoded key ('12345678'), making encrypted data vulnerable.",Helpers\CryptoHelper.cs,8,19,5,6,1
+llms-result.sarif,openai/gpt-4.1,7,UPLOAD001,"The SaveTrackFile method in MusicService writes uploaded files directly using their original file name from user input, allowing for path traversal and potentially overwriting critical files.",Services\MusicService.cs,12,17,5,41,1
+llms-result.sarif,openai/gpt-4.1,7,DESERIALIZATION001,"The DeserializeTrack method in MusicService deserializes user-provided JSON as a dynamic object without type checking or validation, which can expose data or result in denial of service.",Services\MusicService.cs,19,23,5,71,0
+llms-result.sarif,openai/gpt-4.1,7,AUTH002,"The MusicController endpoints (track, upload, play) and UserController endpoints (greet) have no evident authentication or authorization requirements, potentially exposing them to unauthorized use.",Controllers\MusicController.cs,9,33,1,2,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SQLI-001,Direct string concatenation in SQL query in GetTrackById method makes it vulnerable to SQL injection,Services/MusicService.cs,8,8,9,70,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,XSS-001,Unsanitized user input in Greet method is reflected in HTML response,Controllers/UserController.cs,20,20,9,60,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,CRYPTO-001,Use of weak DES algorithm with hardcoded key in CryptoHelper,Helpers/CryptoHelper.cs,8,16,5,10,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,AUTH-001,Hardcoded credentials in UserService.Authenticate method,Services/UserService.cs,6,6,9,56,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,FILE-001,File upload without proper file type validation or size restrictions,Services/MusicService.cs,13,16,5,10,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,DESER-001,Unsafe deserialization of dynamic type in DeserializeTrack method,Services/MusicService.cs,19,19,9,60,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,CRYPTO-002,Hardcoded encryption key in CryptoHelper,Helpers/CryptoHelper.cs,8,8,25,50,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,SQL_INJECTION,Unsanitized input used in SQL query.,Services/MusicService.cs,9,11,13,34,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,XSS,User input directly embedded in HTML response without sanitization.,Controllers/UserController.cs,19,21,16,48,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,HARDCODED_CREDENTIALS,Hardcoded username and password in authentication logic.,Services/UserService.cs,8,10,16,42,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,INSECURE_FILE_UPLOAD,File uploads saved without validation or restriction.,Services/MusicService.cs,13,18,13,26,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,INSECURE_CRYPTO,Use of weak DES algorithm and hardcoded encryption key.,Helpers/CryptoHelper.cs,9,17,13,34,1
+snyk-result.sarif,SnykCode,7,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,Controllers/MusicController.cs,24,24,26,37,1
+snyk-result.sarif,SnykCode,7,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,Controllers/MusicController.cs,30,30,26,35,0
+snyk-result.sarif,SnykCode,7,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,Controllers/UserController.cs,18,18,26,31,0
+snyk-result.sarif,SnykCode,7,csharp/InsecureCipher,The DES cipher is insecure. Consider using AES instead.,Helpers/CryptoHelper.cs,11,11,25,35,1
+snyk-result.sarif,SnykCode,7,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found username or password credential used in a condition.,Services/UserService.cs,7,7,35,52,1
+snyk-result.sarif,SnykCode,7,csharp/PT,"Unsanitized input from an HTTP parameter flows into global::System.IO.FileStream, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.",Controllers/MusicController.cs,26,26,19,46,1
+snyk-result.sarif,SnykCode,7,csharp/XSS,Unsanitized input from an HTTP parameter flows into an HTTP response via global::Microsoft.AspNetCore.Mvc.ControllerBase.Content. This may result in an XSS vulnerability.,Controllers/UserController.cs,28,28,16,23,1

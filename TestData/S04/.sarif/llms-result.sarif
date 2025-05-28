@@ -1,0 +1,468 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "MissingAuthZ-001",
+              "shortDescription": {
+                "text": "Missing authentication and authorization on API endpoints"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication / Authorization"
+                ]
+              }
+            },
+            {
+              "id": "SQLi-001",
+              "shortDescription": {
+                "text": "Potential SQL Injection via unconstrained LINQ methods"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "MissingAuthZ-001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "All API endpoints are exposed without any authentication or authorization mechanisms, allowing unauthenticated users to access, modify, and delete user data."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 17,
+                  "endLine": 88,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLi-001",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "The endpoint '/users/search' uses 'Contains' within a LINQ query to search users by username. If the underlying ORM and provider (in this case, EF Core with SQLite) correctly parameterize the query, the risk is low. However, this pattern should be reviewed if translated to raw SQL or with other providers."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 70,
+                  "endLine": 77,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQLI-001",
+              "shortDescription": {
+                "text": "Potential SQL Injection vulnerability in string-based query construction"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "CRYPTO-001",
+              "shortDescription": {
+                "text": "Insecure storage of sensitive data"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Configuration"
+                ]
+              }
+            },
+            {
+              "id": "AUTH-001",
+              "shortDescription": {
+                "text": "Missing authentication/authorization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "INPUT-001",
+              "shortDescription": {
+                "text": "Insufficient input validation"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Input Validation"
+                ]
+              }
+            },
+            {
+              "id": "DATA-001",
+              "shortDescription": {
+                "text": "Potential sensitive data exposure"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Data Exposure"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQLI-001",
+          "ruleIndex": 0,
+          "level": "warning",
+          "message": {
+            "text": "The search endpoint uses string.Contains() which could lead to SQL injection if the input is not properly sanitized. Consider using parameterized queries or EF Core's FromSqlInterpolated for safer SQL construction."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 60,
+                  "endLine": 64,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CRYPTO-001",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "The application uses SQLite with a direct connection string in code. Consider using secure configuration management for database connection strings."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 11,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "AUTH-001",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "All API endpoints are exposed without any authentication or authorization checks. This allows unauthenticated access to all user data operations."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 17,
+                  "endLine": 17,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INPUT-001",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "The username search endpoint accepts raw user input without length or content validation beyond the User model constraints."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 60,
+                  "endLine": 64,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "DATA-001",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "All user data is returned without any sensitive data filtering. Consider implementing DTOs to control data exposure."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 17,
+                  "endLine": 17,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SensitiveDataExposure",
+              "shortDescription": {
+                "text": "Sensitive data exposure through lack of authentication/authorization mechanisms"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authorization"
+                ]
+              }
+            },
+            {
+              "id": "SQLInjection",
+              "shortDescription": {
+                "text": "Potential SQL Injection vulnerability due to direct use of user input in database queries"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQLInjection"
+                ]
+              }
+            },
+            {
+              "id": "OutdatedLibrary",
+              "shortDescription": {
+                "text": "Use of outdated or vulnerable libraries"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "DependencyManagement"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SensitiveDataExposure",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "No authentication or authorization mechanisms are implemented to protect the endpoints."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 21,
+                  "endLine": 21,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLInjection",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "The use of user input directly in the database query without proper sanitization can lead to SQL Injection."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 63,
+                  "endLine": 63,
+                  "startColumn": 22,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "OutdatedLibrary",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "Microsoft.EntityFrameworkCore and Microsoft.EntityFrameworkCore.Sqlite versions are outdated and may contain vulnerabilities."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "S04.csproj",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 11,
+                  "startColumn": 5,
+                  "endColumn": 75
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

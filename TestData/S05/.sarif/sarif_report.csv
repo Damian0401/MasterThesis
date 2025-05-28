@@ -1,0 +1,19 @@
+SARIF File,Driver Name,Total Results,ruleId,message,path,startLine,endLine,startColumn,endColumn,isCorrect
+codeql-result.sarif,CodeQL,3,cs/hardcoded-credentials,"The hard-coded value ""admin"" flows to the [userName](1) parameter in [call to method FindByNameAsync](2).",Program.cs,47,,55,62,1
+codeql-result.sarif,CodeQL,3,cs/hardcoded-credentials,"The hard-coded value ""admin"" flows to the [setter call argument](1) in [UserName](2).",Program.cs,50,,51,58,1
+codeql-result.sarif,CodeQL,3,cs/hardcoded-credentials,"The hard-coded value ""Admin123!"" flows to the [password](1) parameter in [call to method CreateAsync](2).",Program.cs,51,,50,61,1
+llms-result.sarif,openai/gpt-4.1,4,Auth.MissingAuthorization.UsersList,"The /users endpoint exposes a list of all usernames but lacks authentication and authorization, allowing any user to enumerate usernames. This breaks the principle of least privilege and may enable enumeration attacks.",Program.cs,63,68,1,2,1
+llms-result.sarif,openai/gpt-4.1,4,Auth.MissingAuthorization.DeleteUser,"The /users/{username} delete endpoint does not perform authentication or authorization, allowing any user (including anonymous) to delete arbitrary user accounts.",Program.cs,70,76,1,2,1
+llms-result.sarif,openai/gpt-4.1,4,Creds.Hardcoded.AdminAccount,"An 'admin' user is automatically created at application startup with a default, weak password ('Admin123!'), which can be easily discovered and abused by attackers if not immediately changed.",Program.cs,34,41,1,2,1
+llms-result.sarif,openai/gpt-4.1,4,Input.NoPasswordPolicy,"The /register endpoint accepts passwords but does not enforce any custom password strength or validation policy, relying solely on Identity defaults, which could be insufficient in some deployments and regulatory environments.",Program.cs,44,49,1,2,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,5,SEC001,The application creates a default admin user with hardcoded credentials ('admin'/'Admin123!') which poses a security risk.,Program.cs,35,42,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,5,SEC002,The registration endpoint accepts any password without enforcing complexity requirements.,Program.cs,45,50,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,5,SEC003,"The '/users' endpoint exposes all usernames without any authorization check, potentially leaking sensitive information.",Program.cs,80,84,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,5,SEC004,The '/users/{username}' delete endpoint allows any authenticated user to delete accounts without proper authorization checks.,Program.cs,87,93,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,5,SEC005,The JWT configuration doesn't specify a minimum key length requirement. Consider enforcing a minimum of 256-bit keys for HS256 algorithm.,Program.cs,18,30,1,1,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,HardcodedCredentials,Hardcoded admin credentials found in the code.,Program.cs,37,37,53,70,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,HardcodedCredentials,Hardcoded admin password found in the code.,Program.cs,40,40,49,62,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,ImproperInputValidation,Input validation is missing for the user registration endpoint.,Program.cs,76,80,5,29,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,InsecureAuthentication,The user list endpoint does not have proper authentication/authorization checks.,Program.cs,101,105,5,36,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,5,InsecureAuthentication,The user deletion endpoint does not have proper authentication/authorization checks.,Program.cs,108,113,5,36,1
+snyk-result.sarif,SnykCode,1,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found hardcoded credential used in username variable declaration.,Program.cs,50,50,40,48,1

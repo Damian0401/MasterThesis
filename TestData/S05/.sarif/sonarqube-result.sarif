@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "SonarQube",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "http://localhost:5050/coding_rules",
+          "rules": []
+        }
+      },
+      "results": []
+    }
+  ]
+}

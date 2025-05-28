@@ -1,0 +1,98 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Data.Sqlite;
+using System.Diagnostics;
+using System.Text.Json;
+using System.IO;
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+var adminPassword = "SuperSecret123!";
+
+var connection = new SqliteConnection("Data Source=:memory:");
+connection.Open();
+var cmd = connection.CreateCommand();
+cmd.CommandText = @"
+CREATE TABLE Users (Id INTEGER PRIMARY KEY, Username TEXT, Password TEXT);
+INSERT INTO Users (Username, Password) VALUES ('admin', 'admin123');
+INSERT INTO Users (Username, Password) VALUES ('user', 'pass');
+";
+cmd.ExecuteNonQuery();
+
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsync("Welcome to the API testbed!");
+});
+
+app.MapGet("/login", async context =>
+{
+    var username = context.Request.Query["user"];
+    var password = context.Request.Query["pass"];
+    var sql = $"SELECT * FROM Users WHERE Username = '{username}' AND Password = '{password}'"; 
+
+    var loginCmd = connection.CreateCommand();
+    loginCmd.CommandText = sql;
+    var reader = loginCmd.ExecuteReader();
+
+    if (reader.Read())
+        await context.Response.WriteAsync("Login successful!");
+    else
+        await context.Response.WriteAsync("Invalid credentials.");
+});
+
+app.MapPost("/comment", async context =>
+{
+    var form = await context.Request.ReadFormAsync();
+    var comment = form["comment"];
+    await context.Response.WriteAsync($"<p>Your comment: {comment}</p>");
+});
+
+app.MapGet("/ping", async context =>
+{
+    var host = context.Request.Query["host"];
+    var result = Process.Start(new ProcessStartInfo
+    {
+        FileName = "/bin/bash",
+        Arguments = $"-c \"ping -c 1 {host}\"",
+        RedirectStandardOutput = true
+    });
+
+    string output = result.StandardOutput.ReadToEnd();
+    await context.Response.WriteAsync(output);
+});
+
+app.MapGet("/readfile", async context =>
+{
+    var filename = context.Request.Query["file"];
+    var content = await File.ReadAllTextAsync(filename); 
+    await context.Response.WriteAsync($"<pre>{content}</pre>");
+});
+
+app.MapPost("/deserialize", async context =>
+{
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync();
+    try
+    {
+        var obj = JsonSerializer.Deserialize<Dictionary<string, string>>(body);
+        await context.Response.WriteAsync($"Deserialized: {string.Join(", ", obj)}");
+    }
+    catch
+    {
+        await context.Response.WriteAsync("Invalid input.");
+    }
+});
+
+app.MapGet("/debug", async context =>
+{
+    var env = Environment.GetEnvironmentVariables();
+    await context.Response.WriteAsync("<h3>Environment Variables:</h3><ul>");
+    foreach (var key in env.Keys)
+    {
+        await context.Response.WriteAsync($"<li>{key}: {env[key]}</li>");
+    }
+    await context.Response.WriteAsync("</ul>");
+});
+
+app.Run();

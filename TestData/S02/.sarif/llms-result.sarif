@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQLInjection.RawQuery",
+              "shortDescription": {
+                "text": "Potential SQL Injection via raw query construction with user input."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "XSS.UnencodedOutput",
+              "shortDescription": {
+                "text": "Potential Cross-Site Scripting vulnerability due to unencoded user input in HTML output."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Scripting (XSS)"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQLInjection.RawQuery",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "User input from the 'name' query parameter is concatenated directly into a SQL statement without sanitization or parameterization, allowing for SQL injection."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 28,
+                  "endLine": 38,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS.UnencodedOutput",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "User-supplied 'message' from query string is injected directly into HTML without encoding or sanitization, allowing for XSS attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 40,
+                  "endLine": 44,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS.UnencodedOutput",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "User input returned in the SQL search result list items (<li>) is not HTML encoded, allowing stored or reflected XSS if the database is compromised or poisoned."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 34,
+                  "endLine": 36,
+                  "startColumn": 9,
+                  "endColumn": 25
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQLI-001",
+              "shortDescription": {
+                "text": "SQL Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "XSS-001",
+              "shortDescription": {
+                "text": "Cross-Site Scripting (XSS) vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Scripting"
+                ]
+              }
+            },
+            {
+              "id": "XSS-002",
+              "shortDescription": {
+                "text": "Cross-Site Scripting (XSS) vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Scripting"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQLI-001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "User input is directly concatenated into SQL query without parameterization, allowing SQL injection"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 50,
+                  "endLine": 50,
+                  "startColumn": 17,
+                  "endColumn": 55
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS-001",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "User input is directly written to response without HTML encoding, allowing XSS attacks"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 70,
+                  "endLine": 70,
+                  "startColumn": 50,
+                  "endColumn": 70
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS-002",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "User input from database is directly written to response without HTML encoding, allowing XSS attacks"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 56,
+                  "endLine": 56,
+                  "startColumn": 50,
+                  "endColumn": 70
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQL_INJECTION",
+              "shortDescription": {
+                "text": "Avoid using user inputs directly in SQL queries to prevent SQL injection attacks."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "XSS",
+              "shortDescription": {
+                "text": "Avoid directly inserting user inputs into HTML to prevent Cross-Site Scripting (XSS) attacks."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "VULNERABLE_LIBRARY",
+              "shortDescription": {
+                "text": "Ensure that all dependencies are up-to-date and free from known vulnerabilities."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQL_INJECTION",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "The query parameter 'name' is directly inserted into the SQL query, making it vulnerable to SQL injection."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 49,
+                  "endLine": 49,
+                  "startColumn": 17,
+                  "endColumn": 56
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "The query parameter 'message' is directly inserted into the HTML response, making it vulnerable to XSS."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 63,
+                  "endLine": 63,
+                  "startColumn": 21,
+                  "endColumn": 63
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "VULNERABLE_LIBRARY",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "The version '9.0.5' of the 'Microsoft.Data.Sqlite' package is outdated. Consider updating to a more recent version."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "S02.csproj",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 12,
+                  "startColumn": 47,
+                  "endColumn": 55
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

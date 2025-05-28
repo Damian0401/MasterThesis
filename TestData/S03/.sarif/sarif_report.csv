@@ -1,0 +1,34 @@
+SARIF File,Driver Name,Total Results,ruleId,message,path,startLine,endLine,startColumn,endColumn,isCorrect
+codeql-result.sarif,CodeQL,3,cs/path-injection,This path depends on a [user-provided value](1).,Program.cs,68,,47,55,1
+codeql-result.sarif,CodeQL,3,cs/command-line-injection,This command line depends on a [user-provided value](1).,Program.cs,57,,21,47,1
+codeql-result.sarif,CodeQL,3,cs/sql-injection,"This query depends on [this ASP.NET Core query string](1).
+This query depends on [this ASP.NET Core query string](2).",Program.cs,35,,28,31,1
+llms-result.sarif,openai/gpt-4.1,8,SEC001,"The /login endpoint constructs SQL commands by directly concatenating user inputs, making the application vulnerable to SQL Injection. Use parameterized queries to avoid this risk.",Program.cs,21,33,1,1,1
+llms-result.sarif,openai/gpt-4.1,8,SEC002,"The /comment endpoint directly includes user-provided comments in the response HTML without sanitization or encoding, leading to XSS vulnerability.",Program.cs,35,41,1,1,1
+llms-result.sarif,openai/gpt-4.1,8,SEC003,"The /ping endpoint uses unsanitized 'host' query parameter in shell command line, allowing arbitrary command execution (Command Injection).",Program.cs,43,52,1,1,1
+llms-result.sarif,openai/gpt-4.1,8,SEC004,"The /readfile endpoint reads files from a path provided by the user with no validation, allowing path traversal and unintended file access.",Program.cs,54,59,1,1,1
+llms-result.sarif,openai/gpt-4.1,8,SEC005,Hardcoded admin password ('SuperSecret123!') found in source code. Secrets should not be hardcoded and must be stored in a secure configuration.,Program.cs,9,9,1,41,1
+llms-result.sarif,openai/gpt-4.1,8,SEC006,"Endpoints like /ping, /readfile, /debug, and /deserialize lack access controls. Attackers can misuse these without any authentication or authorization.",Program.cs,35,78,1,1,0
+llms-result.sarif,openai/gpt-4.1,8,SEC007,"The /debug endpoint exposes all server environment variables in the HTTP response, potentially leaking sensitive data.",Program.cs,71,78,1,1,0
+llms-result.sarif,openai/gpt-4.1,8,SEC008,"The /deserialize endpoint deserializes arbitrary JSON bodies with no type or input validation, which can lead to security issues with more complex types and structures.",Program.cs,61,69,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,SQLI-001,"SQL query is constructed using string concatenation with user input, making it vulnerable to SQL injection.",Program.cs,25,25,20,80,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,XSS-001,"User input is directly written to response without proper encoding, making it vulnerable to XSS.",Program.cs,40,40,50,70,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,CMD-001,"User input is directly used in a system command without proper sanitization, making it vulnerable to command injection.",Program.cs,45,50,20,30,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,FILE-001,"User input is directly used as a file path without validation, making it vulnerable to path traversal attacks.",Program.cs,55,55,25,45,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,SECRET-001,Hardcoded sensitive information (admin password) found in source code.,Program.cs,8,8,4,30,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,AUTH-001,Passwords are stored in plaintext in the database.,Program.cs,12,15,4,60,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,INFO-001,Environment variables are exposed through debug endpoint.,Program.cs,75,81,4,30,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,DESER-001,Untrusted data is deserialized without proper validation or type checking.,Program.cs,60,70,4,30,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,SQL_INJECTION,User input is directly concatenated into an SQL query string.,Program.cs,34,34,17,82,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,XSS_VULNERABILITY,User input is directly written to the response without sanitization.,Program.cs,49,49,17,66,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,COMMAND_INJECTION,User input is directly used in a command execution.,Program.cs,56,56,23,55,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,PATH_TRAVERSAL,User input is directly used in file path without validation.,Program.cs,64,64,15,45,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,INSECURE_DESERIALIZATION,Deserialization of untrusted data without proper validation.,Program.cs,72,72,17,66,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,SENSITIVE_DATA_EXPOSURE,Exposing environment variables without proper authorization.,Program.cs,80,80,17,46,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,HARDCODED_CREDENTIALS,Hardcoded password found in the code.,Program.cs,10,10,9,30,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,WEAK_ALGORITHM,Using an outdated version of Microsoft.Data.Sqlite library.,S03.csproj,12,12,31,42,0
+snyk-result.sarif,SnykCode,3,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found hardcoded credential used in password variable declaration.,Program.cs,11,11,5,38,1
+snyk-result.sarif,SnykCode,3,csharp/PT,"Unsanitized input from an HTTP parameter flows into global::System.IO.File.ReadAllTextAsync, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to read arbitrary files.",Program.cs,68,68,25,46,1
+snyk-result.sarif,SnykCode,3,csharp/Sqli,"Unsanitized input from an HTTP parameter flows into the CommandText property of a SQL command, where it is used in an SQL query. This may result in an SQL Injection vulnerability.",Program.cs,35,35,5,31,1
+sonarqube-result.sarif,SonarQube,2,csharpsquid:S2068,"""password"" detected here, make sure this is not a hard-coded credential.",Program.cs,11,11,4,37,1
+sonarqube-result.sarif,SonarQube,2,csharpsquid:S2077,Make sure using a dynamically formatted SQL query is safe here.,Program.cs,35,35,4,24,1

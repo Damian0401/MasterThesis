@@ -1,0 +1,43 @@
+SARIF File,Driver Name,Total Results,ruleId,message,path,startLine,endLine,startColumn,endColumn,isCorrect
+codeql-result.sarif,CodeQL,4,cs/command-line-injection,This command line depends on a [user-provided value](1).,Controllers/UtilityController.cs,13,,36,53,1
+codeql-result.sarif,CodeQL,4,cs/sql-injection,This query depends on [this ASP.NET Core MVC action method parameter](1).,Controllers/UserController.cs,13,,34,86,1
+codeql-result.sarif,CodeQL,4,cs/unsafe-deserialization-untrusted-input,[User-provided data](1) flows to unsafe deserializer.,Controllers/DeserializeController.cs,15,,45,47,1
+codeql-result.sarif,CodeQL,4,cs/insecure-sql-connection,[Connection string](1) flows to this SQL connection and does not specify `Encrypt=True`.,Controllers/UserController.cs,11,,38,109,0
+llms-result.sarif,openai/gpt-4.1,9,HARD_CODED_CREDENTIAL,Hardcoded password 'admin123' detected in source code. Hardcoded credentials can be easily compromised.,Controllers\AuthController.cs,8,8,27,38,1
+llms-result.sarif,openai/gpt-4.1,9,WEAK_CRYPTOGRAPHY,MD5 is used for token generation. MD5 is insecure and vulnerable to collision attacks.,Controllers\AuthController.cs,17,21,9,30,1
+llms-result.sarif,openai/gpt-4.1,9,HARDCODED_KEY,Hardcoded key 'mysecretkey' used for token generation. Keys should be managed securely.,Controllers\AuthController.cs,14,14,19,32,1
+llms-result.sarif,openai/gpt-4.1,9,XSS_REFLECTION,"User-supplied comment is reflected into HTML response without encoding, leading to possible XSS.",Controllers\CommentController.cs,9,11,16,77,1
+llms-result.sarif,openai/gpt-4.1,9,INSECURE_DESERIALIZATION,Use of BinaryFormatter to deserialize untrusted input. This can lead to arbitrary code execution.,Controllers\DeserializeController.cs,11,16,9,43,1
+llms-result.sarif,openai/gpt-4.1,9,SQL_INJECTION,"The SQL command concatenates user input directly into the query, making it vulnerable to SQL injection.",Controllers\UserController.cs,11,14,20,81,1
+llms-result.sarif,openai/gpt-4.1,9,COMMAND_INJECTION,"User-supplied 'host' is concatenated into command line, risking command injection.",Controllers\UtilityController.cs,10,20,9,21,1
+llms-result.sarif,openai/gpt-4.1,9,DEFAULT_SWAGGER_ENABLED,"Swagger UI is enabled without authentication, potentially exposing API documentation and endpoints.",Program.cs,10,13,1,24,0
+llms-result.sarif,openai/gpt-4.1,9,VULNERABLE_DEPENDENCY,System.Data.SqlClient version 4.9.0 may be outdated. Ensure dependencies are updated to latest secure versions.,S09.csproj,13,13,5,71,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SEC001,Hardcoded password 'admin123' found in authentication logic,Controllers\AuthController.cs,8,8,5,40,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SEC002,Using MD5 for token generation with hardcoded key 'mysecretkey',Controllers\AuthController.cs,18,18,17,33,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SEC003,Unsanitized user input directly embedded in HTML response,Controllers\CommentController.cs,10,10,9,56,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SEC004,BinaryFormatter is used for deserialization which is inherently unsafe,Controllers\DeserializeController.cs,12,12,27,42,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SEC005,Concatenated user input directly in SQL query without parameterization,Controllers\UserController.cs,11,11,13,75,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SEC006,Unsanitized user input used in system command execution,Controllers\UtilityController.cs,10,10,9,50,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,7,SEC007,System.Data.SqlClient (v4.9.0) is deprecated in favor of Microsoft.Data.SqlClient,S09.csproj,9,9,5,60,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,7,HardcodedCredentials,Hardcoded password found.,Controllers/AuthController.cs,8,8,25,42,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,7,WeakCryptography,"MD5 is used for hashing, which is considered weak.",Controllers/AuthController.cs,20,20,18,21,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,7,HardcodedKey,Hardcoded cryptographic key found.,Controllers/AuthController.cs,17,17,15,29,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,7,XSS,Unsanitized user input directly injected into HTML.,Controllers/CommentController.cs,11,11,16,49,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,7,InsecureDeserialization,"BinaryFormatter is used for deserialization, which is insecure.",Controllers/DeserializeController.cs,13,13,23,39,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,7,SQLInjection,Unsanitized user input directly injected into SQL query.,Controllers/UserController.cs,12,12,27,71,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,7,CommandInjection,Unsanitized user input directly injected into command.,Controllers/UtilityController.cs,13,13,32,49,1
+snyk-result.sarif,SnykCode,11,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,Controllers/AuthController.cs,12,12,19,24,0
+snyk-result.sarif,SnykCode,11,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,Controllers/CommentController.cs,8,8,19,30,0
+snyk-result.sarif,SnykCode,11,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,Controllers/DeserializeController.cs,10,10,19,37,0
+snyk-result.sarif,SnykCode,11,csharp/BinaryFormatterUsage,"The BinaryFormatter class was found to be in use. As per Microsoft recommendations, BinaryFormatter serialization is obsolete and should not be used",Controllers/DeserializeController.cs,15,15,23,44,1
+snyk-result.sarif,SnykCode,11,csharp/CommandInjection,"Unsanitized input from an HTTP parameter flows into the arguments of a System.Diagnostics.ProcessStartInfo object, where it is used as a shell command. This may result in a Command Injection vulnerability.",Controllers/UtilityController.cs,13,13,9,53,1
+snyk-result.sarif,SnykCode,11,csharp/Deserialization,"Unsanitized input from an HTTP parameter flows into Deserialize, where it is used to deserialize an object. This may result in an Unsafe Deserialization vulnerability.",Controllers/DeserializeController.cs,15,15,23,44,1
+snyk-result.sarif,SnykCode,11,csharp/InsecureHash,The MD5 hash (used by global::System.Security.Cryptography.MD5.Create) is insecure. Consider changing it to a secure hash algorithm.,Controllers/AuthController.cs,25,25,26,36,1
+snyk-result.sarif,SnykCode,11,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found hardcoded credential used in password variable declaration.,Controllers/AuthController.cs,9,9,20,50,1
+snyk-result.sarif,SnykCode,11,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found hardcoded credential used in secret key variable declaration.,Controllers/AuthController.cs,23,23,13,32,1
+snyk-result.sarif,SnykCode,11,csharp/Sqli,"Unsanitized input from an HTTP parameter flows into global::System.Data.SqlClient.SqlCommand, where it is used in an SQL query. This may result in an SQL Injection vulnerability.",Controllers/UserController.cs,13,13,19,93,1
+snyk-result.sarif,SnykCode,11,csharp/XSS,Unsanitized input from an HTTP parameter flows into an HTTP response via PostComment. This may result in an XSS vulnerability.,Controllers/CommentController.cs,10,10,16,68,1
+sonarqube-result.sarif,SonarQube,4,csharpsquid:S2068,"""password"" detected here, make sure this is not a hard-coded credential.",Controllers/AuthController.cs,9,9,19,49,1
+sonarqube-result.sarif,SonarQube,4,csharpsquid:S2077,Make sure using a dynamically formatted SQL query is safe here.,Controllers/UserController.cs,13,13,18,92,1
+sonarqube-result.sarif,SonarQube,4,csharpsquid:S4036,"Make sure the ""PATH"" used to find this command includes only what you intend.",Controllers/UtilityController.cs,12,12,8,31,1
+sonarqube-result.sarif,SonarQube,4,csharpsquid:S4790,Make sure this weak hash algorithm is not used in a sensitive context here.,Controllers/AuthController.cs,25,25,25,37,1

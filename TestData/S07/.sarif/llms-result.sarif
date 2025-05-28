@@ -1,0 +1,1314 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SEC-HARDCODE-CREDENTIALS",
+              "shortDescription": {
+                "text": "Hardcoded credentials or secrets should never be present in source code."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SEC-HARDCODE-TOKEN",
+              "shortDescription": {
+                "text": "Tokens or secrets must be generated securely and never reveal predictable patterns or use static components."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SEC-SQL-INJECTION",
+              "shortDescription": {
+                "text": "Avoid dynamically composing SQL queries with user input to prevent SQL Injection."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "SEC-IMPROPER-AUTHZ",
+              "shortDescription": {
+                "text": "Missing authentication and authorization checks on controllers and sensitive endpoints."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SEC-UNRESTRICTED-FILE-UPLOAD",
+              "shortDescription": {
+                "text": "Unrestricted file upload without validation/sanitization leads to arbitrary file overwrite and possibly remote code execution."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            },
+            {
+              "id": "SEC-XSS",
+              "shortDescription": {
+                "text": "Server-side generated HTML directly reflects unsanitized user input, allowing Cross-Site Scripting (XSS)."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Scripting"
+                ]
+              }
+            },
+            {
+              "id": "SEC-DESERIALIZATION",
+              "shortDescription": {
+                "text": "Deserializing untrusted input may lead to code execution, injection or data tampering."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "SEC-WEAK-CRYPTO",
+              "shortDescription": {
+                "text": "Usage of outdated/weak cryptography is insecure."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "SEC-COMMAND-INJECTION",
+              "shortDescription": {
+                "text": "Do not use untrusted input directly in system commands."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Command Injection"
+                ]
+              }
+            },
+            {
+              "id": "SEC-PATH-TRAVERSAL",
+              "shortDescription": {
+                "text": "Unvalidated user input used in file names/paths can lead to path traversal vulnerabilities."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SEC-HARDCODE-CREDENTIALS",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded username and password detected in SignIn method. This exposes static credentials that could be easily guessed, leading to unauthorized access."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 13,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-HARDCODE-TOKEN",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Token generation in GetToken uses predictable pattern and static secret concatenation, allowing impersonation through token manipulation."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 18,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-SQL-INJECTION",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "SQL query is constructed using untrusted input from parameter 'id'. This allows an attacker to inject arbitrary SQL."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 17,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-SQL-INJECTION",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "SQL query is constructed using untrusted input from parameter 'id'. This allows an attacker to inject arbitrary SQL commands."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 61,
+                  "endLine": 65,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-IMPROPER-AUTHZ",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "AuthController and InventoryController have no authentication or authorization attributes or checks, exposing all methods publicly."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 1,
+                  "endLine": 20,
+                  "startColumn": 1,
+                  "endColumn": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-IMPROPER-AUTHZ",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "AuthController and InventoryController have no authentication or authorization attributes or checks, exposing all methods publicly."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 1,
+                  "endLine": 67,
+                  "startColumn": 1,
+                  "endColumn": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-UNRESTRICTED-FILE-UPLOAD",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Uploaded file path is not sanitized, and the file type or content is not checked. An attacker can upload files with dangerous names (such as ../../web.config) or executable content."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 19,
+                  "endLine": 24,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-XSS",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "The Filter endpoint places the 'category' parameter directly into HTML output without encoding, allowing XSS attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 26,
+                  "endLine": 29,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-DESERIALIZATION",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "The AddItem endpoint deserializes user-controlled payload with Json.NET, which can lead to insecure deserialization attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 31,
+                  "endLine": 35,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-WEAK-CRYPTO",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "WeakEncrypt uses DES, an outdated and insecure encryption algorithm, and a hardcoded key and IV. This allows encrypted data to be easily compromised."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 23,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-COMMAND-INJECTION",
+          "ruleIndex": 8,
+          "level": "error",
+          "message": {
+            "text": "RunSystemCommand method receives 'cmd' parameter and concatenates it into shell command, leading to command injection."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 25,
+                  "endLine": 31,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-COMMAND-INJECTION",
+          "ruleIndex": 8,
+          "level": "error",
+          "message": {
+            "text": "The ExecuteCommand endpoint allows attackers to execute arbitrary system commands via the 'cmd' parameter."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 47,
+                  "endLine": 51,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-PATH-TRAVERSAL",
+          "ruleIndex": 9,
+          "level": "error",
+          "message": {
+            "text": "SaveNoteToFile endpoint uses filename from user input directly with File.WriteAllText, allowing path traversal and overwrite of arbitrary files."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 39,
+                  "endLine": 44,
+                  "startColumn": 9,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-PATH-TRAVERSAL",
+          "ruleIndex": 9,
+          "level": "error",
+          "message": {
+            "text": "WriteContentToFile writes user-defined filenames directly to disk with no validation, allowing for path traversal and file overwrite."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Utils.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 13,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-DESERIALIZATION",
+          "ruleIndex": 6,
+          "level": "warning",
+          "message": {
+            "text": "UnsafeDeserialize<T> relies on untrusted deserialization from JsonSerializer, which could introduce security risks if not properly constrained."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Utils.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 5,
+                  "endLine": 8,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "HARDCODED_CREDENTIALS",
+              "shortDescription": {
+                "text": "Hardcoded credentials in authentication logic"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SQL_INJECTION",
+              "shortDescription": {
+                "text": "SQL injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Injection"
+                ]
+              }
+            },
+            {
+              "id": "XSS",
+              "shortDescription": {
+                "text": "Cross-site scripting vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "XSS"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_DESERIALIZATION",
+              "shortDescription": {
+                "text": "Insecure deserialization vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "WEAK_CRYPTO",
+              "shortDescription": {
+                "text": "Use of weak cryptographic algorithm"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "COMMAND_INJECTION",
+              "shortDescription": {
+                "text": "Command injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Injection"
+                ]
+              }
+            },
+            {
+              "id": "UNRESTRICTED_FILE_UPLOAD",
+              "shortDescription": {
+                "text": "Unrestricted file upload vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            },
+            {
+              "id": "PATH_TRAVERSAL",
+              "shortDescription": {
+                "text": "Path traversal vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "HARDCODED_CREDENTIALS",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded credentials 'warehouse:1234' found in authentication logic"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 8,
+                  "startColumn": 8,
+                  "endColumn": 38
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQL_INJECTION",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Concatenating user input directly into SQL query in GetItem method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 15,
+                  "startColumn": 17,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQL_INJECTION",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Concatenating user input directly into SQL query in DeleteItem method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 56,
+                  "endLine": 56,
+                  "startColumn": 17,
+                  "endColumn": 63
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input in HTML output in Filter method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 28,
+                  "endLine": 28,
+                  "startColumn": 16,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_DESERIALIZATION",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Unsafe deserialization of user-controlled data in AddItem method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 33,
+                  "endLine": 33,
+                  "startColumn": 16,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "WEAK_CRYPTO",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Using DES encryption with hardcoded key in WeakEncrypt method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 19,
+                  "endLine": 19,
+                  "startColumn": 16,
+                  "endColumn": 38
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "COMMAND_INJECTION",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input passed to system command in ExecuteCommand method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 45,
+                  "endLine": 45,
+                  "startColumn": 16,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UNRESTRICTED_FILE_UPLOAD",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "File upload without proper validation of file type or path in UploadImage method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 21,
+                  "endLine": 21,
+                  "startColumn": 16,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "PATH_TRAVERSAL",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input used as file path in SaveNoteToFile method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 39,
+                  "endLine": 39,
+                  "startColumn": 16,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_DESERIALIZATION",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Unsafe deserialization method exposed in Utils class"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Utils.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 5,
+                  "endLine": 5,
+                  "startColumn": 16,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "HardcodedCredentials",
+              "shortDescription": {
+                "text": "Hardcoded credentials"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SQLInjection",
+              "shortDescription": {
+                "text": "SQL Injection"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Injection"
+                ]
+              }
+            },
+            {
+              "id": "XSS",
+              "shortDescription": {
+                "text": "Cross-Site Scripting (XSS)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Injection"
+                ]
+              }
+            },
+            {
+              "id": "InsecureDeserialization",
+              "shortDescription": {
+                "text": "Insecure Deserialization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "WeakCryptography",
+              "shortDescription": {
+                "text": "Weak Cryptography"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "CommandInjection",
+              "shortDescription": {
+                "text": "Command Injection"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Injection"
+                ]
+              }
+            },
+            {
+              "id": "InsecureFileHandling",
+              "shortDescription": {
+                "text": "Insecure File Handling"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "HardcodedCredentials",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded credentials found in the SignIn method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 11,
+                  "startColumn": 13,
+                  "endColumn": 29
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLInjection",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Potential SQL injection vulnerability in GetItem method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 18,
+                  "endLine": 20,
+                  "startColumn": 24,
+                  "endColumn": 66
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLInjection",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Potential SQL injection vulnerability in DeleteItem method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 61,
+                  "endLine": 63,
+                  "startColumn": 24,
+                  "endColumn": 64
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Potential XSS vulnerability in Filter method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 32,
+                  "endLine": 34,
+                  "startColumn": 31,
+                  "endColumn": 95
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureDeserialization",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Potential insecure deserialization vulnerability in AddItem method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 37,
+                  "endLine": 39,
+                  "startColumn": 29,
+                  "endColumn": 68
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "WeakCryptography",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Weak encryption algorithm (DES) used in WeakEncrypt method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 21,
+                  "endLine": 30,
+                  "startColumn": 13,
+                  "endColumn": 55
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CommandInjection",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "Potential command injection vulnerability in ExecuteCommand method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 46,
+                  "endLine": 48,
+                  "startColumn": 29,
+                  "endColumn": 63
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureFileHandling",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "Potential path traversal vulnerability in UploadImage method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 23,
+                  "endLine": 27,
+                  "startColumn": 24,
+                  "endColumn": 70
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureFileHandling",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "Potential path traversal vulnerability in SaveNoteToFile method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "InventoryController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 53,
+                  "endLine": 55,
+                  "startColumn": 31,
+                  "endColumn": 70
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

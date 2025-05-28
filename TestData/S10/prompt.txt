@@ -1,0 +1,191 @@
+----- LockerHelper.cs
+public static class LockerHelper
+{
+    public static bool IsLockerAvailable(Locker locker)
+    {
+        return locker != null && locker.Available;
+    }
+}
+
+----- Program.cs
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddSingleton<LockerService>();
+builder.Services.AddSingleton<UserAccountService>();
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
+----- S10.csproj
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
+
+----- Controllers\LockerController.cs
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("api/[controller]")]
+public class LockerController : ControllerBase
+{
+    private readonly LockerService _lockerService;
+
+    public LockerController(LockerService lockerService)
+    {
+        _lockerService = lockerService;
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetLocker(string id)
+    {
+        if (!_lockerService.Exists(id))
+            return NotFound();
+        return Ok(_lockerService.GetLockerById(id));
+    }
+
+    [HttpPost("assign")]
+    public IActionResult AssignPackage([FromBody] PackageAssignmentRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = _lockerService.AssignPackage(request);
+        return result ? Ok("Package assigned.") : BadRequest("Failed to assign package.");
+    }
+}
+----- Controllers\UserController.cs
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("api/[controller]")]
+public class UserController : ControllerBase
+{
+    private readonly UserAccountService _userService;
+
+    public UserController(UserAccountService userService)
+    {
+        _userService = userService;
+    }
+
+    [HttpPost("register")]
+    public IActionResult Register([FromBody] RegisterUserRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = _userService.Register(request);
+        return result ? Ok("User registered.") : Conflict("User already exists.");
+    }
+
+    [HttpPost("login")]
+    public IActionResult Login([FromBody] LoginRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = _userService.Login(request);
+        return result ? Ok("Login successful.") : Unauthorized("Invalid credentials.");
+    }
+}
+----- Models\Locker.cs
+public class Locker
+{
+    public string Id { get; set; }
+    public string Location { get; set; }
+    public bool Available { get; set; }
+    public string AssignedTo { get; set; }
+}
+----- Models\LoginRequest.cs
+using System.ComponentModel.DataAnnotations;
+
+public class LoginRequest
+{
+    [Required]
+    public string Username { get; set; }
+
+    [Required]
+    public string Password { get; set; }
+}
+----- Models\PackageAssignmentRequest.cs
+using System.ComponentModel.DataAnnotations;
+
+public class PackageAssignmentRequest
+{
+    [Required]
+    public string LockerId { get; set; }
+    [Required]
+    public string PackageCode { get; set; }
+}
+----- Models\RegisterUserRequest.cs
+using System.ComponentModel.DataAnnotations;
+
+public class RegisterUserRequest
+{
+    [Required]
+    [MinLength(4)]
+    public string Username { get; set; }
+
+    [Required]
+    [MinLength(6)]
+    public string Password { get; set; }
+}
+----- Services\LockerService.cs
+using System.Collections.Concurrent;
+
+public class LockerService
+{
+    private readonly ConcurrentDictionary<string, Locker> _lockers = new();
+
+    public LockerService()
+    {
+        _lockers.TryAdd("L1", new Locker { Id = "L1", Location = "Main St 123", Available = true });
+    }
+
+    public bool Exists(string id) => _lockers.ContainsKey(id);
+
+    public Locker GetLockerById(string id) => _lockers.TryGetValue(id, out var locker) ? locker : null;
+
+    public bool AssignPackage(PackageAssignmentRequest request)
+    {
+        if (_lockers.TryGetValue(request.LockerId, out var locker) && locker.Available)
+        {
+            locker.Available = false;
+            locker.AssignedTo = request.PackageCode;
+            return true;
+        }
+        return false;
+    }
+}
+----- Services\UserAccountService.cs
+using System.Collections.Concurrent;
+
+public class UserAccountService
+{
+    private readonly ConcurrentDictionary<string, string> _users = new();
+
+    public bool Register(RegisterUserRequest request)
+    {
+        return _users.TryAdd(request.Username, request.Password);
+    }
+
+    public bool Login(LoginRequest request)
+    {
+        return _users.TryGetValue(request.Username, out var storedPassword) && storedPassword == request.Password;
+    }
+}
+-----

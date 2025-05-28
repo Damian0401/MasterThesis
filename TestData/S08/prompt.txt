@@ -1,0 +1,163 @@
+----- Program.cs
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using MusicApp.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddSingleton<MusicService>();
+builder.Services.AddSingleton<UserService>();
+
+var app = builder.Build();
+
+app.MapControllers();
+
+app.Run();
+----- S08.csproj
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
+
+----- Controllers\MusicController.cs
+using Microsoft.AspNetCore.Mvc;
+using MusicApp.Services;
+
+namespace MusicApp.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class MusicController : ControllerBase
+{
+    private readonly MusicService _musicService;
+
+    public MusicController(MusicService musicService)
+    {
+        _musicService = musicService;
+    }
+
+    [HttpGet("track")]
+    public IActionResult GetTrack(string id)
+    {
+        return Ok(_musicService.GetTrackById(id));
+    }
+
+    [HttpPost("upload")]
+    public IActionResult UploadTrack([FromForm] IFormFile file)
+    {
+        return Ok(_musicService.SaveTrackFile(file));
+    }
+
+    [HttpPost("play")]
+    public IActionResult PlayTrack([FromBody] string trackData)
+    {
+        return Ok(_musicService.DeserializeTrack(trackData));
+    }
+}
+----- Controllers\UserController.cs
+using Microsoft.AspNetCore.Mvc;
+using MusicApp.Services;
+
+namespace MusicApp.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class UserController : ControllerBase
+{
+    private readonly UserService _userService;
+
+    public UserController(UserService userService)
+    {
+        _userService = userService;
+    }
+
+    [HttpPost("login")]
+    public IActionResult Login(string username, string password)
+    {
+        if (_userService.Authenticate(username, password))
+            return Ok("Login successful");
+        return Unauthorized();
+    }
+
+    [HttpGet("greet")]
+    public IActionResult Greet(string name)
+    {
+        return Content($"<h1>Welcome, {name}</h1>", "text/html");
+    }
+}
+----- Helpers\CryptoHelper.cs
+using System.Security.Cryptography;
+using System.Text;
+
+namespace MusicApp.Helpers;
+
+public static class CryptoHelper
+{
+    public static string Encrypt(string data)
+    {
+        var key = Encoding.ASCII.GetBytes("12345678");
+        using var des = DES.Create();
+        des.Key = key;
+        des.IV = key;
+        var encryptor = des.CreateEncryptor();
+        var input = Encoding.UTF8.GetBytes(data);
+        var result = encryptor.TransformFinalBlock(input, 0, input.Length);
+        return Convert.ToBase64String(result);
+    }
+}
+
+----- Models\Track.cs
+namespace MusicApp.Models;
+
+public class Track
+{
+    public string Id { get; set; }
+    public string Title { get; set; }
+    public string Artist { get; set; }
+    public int Duration { get; set; }
+}
+----- Services\MusicService.cs
+using System.IO;
+using System.Text.Json;
+
+namespace MusicApp.Services;
+
+public class MusicService
+{
+    public string GetTrackById(string id)
+    {
+        return $"SELECT * FROM Tracks WHERE Id = '{id}'";
+    }
+
+    public string SaveTrackFile(IFormFile file)
+    {
+        var path = Path.Combine("uploads", file.FileName);
+        using var stream = new FileStream(path, FileMode.Create);
+        file.CopyTo(stream);
+        return "File uploaded";
+    }
+
+    public string DeserializeTrack(string data)
+    {
+        var obj = JsonSerializer.Deserialize<dynamic>(data);
+        return obj?.ToString() ?? "Invalid data";
+    }
+}
+----- Services\UserService.cs
+namespace MusicApp.Services;
+
+public class UserService
+{
+    public bool Authenticate(string user, string pass)
+    {
+        return user == "admin" && pass == "pass123";
+    }
+}
+-----

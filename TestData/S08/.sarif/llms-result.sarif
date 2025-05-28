@@ -1,0 +1,846 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQL001",
+              "shortDescription": {
+                "text": "Potential SQL Injection via string concatenation of user input in SQL queries."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "XSS001",
+              "shortDescription": {
+                "text": "Reflected Cross-Site Scripting (XSS) due to rendering unsanitized user input in HTML response."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Scripting (XSS)"
+                ]
+              }
+            },
+            {
+              "id": "AUTH001",
+              "shortDescription": {
+                "text": "Hardcoded authentication credentials."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded Credentials"
+                ]
+              }
+            },
+            {
+              "id": "CRYPTO001",
+              "shortDescription": {
+                "text": "Usage of weak DES cryptographic algorithm with hardcoded static key and IV."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "UPLOAD001",
+              "shortDescription": {
+                "text": "Unrestricted file upload enabling path traversal or arbitrary upload risks."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure File Handling"
+                ]
+              }
+            },
+            {
+              "id": "DESERIALIZATION001",
+              "shortDescription": {
+                "text": "Insecure deserialization without type restrictions."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "AUTH002",
+              "shortDescription": {
+                "text": "Lack of authentication and authorization on sensitive endpoints."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication/Authorization"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQL001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "The GetTrackById method in MusicService constructs an SQL query by directly embedding the 'id' parameter from user input without any sanitization or use of parameterized queries, which can lead to SQL Injection attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services\\MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 10,
+                  "startColumn": 5,
+                  "endColumn": 66
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS001",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "The Greet action in UserController directly includes the 'name' parameter from the user's query in an HTML response without any encoding or sanitization, enabling XSS attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers\\UserController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 23,
+                  "endLine": 25,
+                  "startColumn": 5,
+                  "endColumn": 71
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "AUTH001",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "The Authenticate method in UserService uses hardcoded username and password ('admin' / 'pass123'), which is insecure and can easily be compromised."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services\\UserService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 6,
+                  "endLine": 9,
+                  "startColumn": 5,
+                  "endColumn": 61
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CRYPTO001",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "The Encrypt method in CryptoHelper uses the DES algorithm, which is outdated and insecure, with a hardcoded key ('12345678'), making encrypted data vulnerable."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Helpers\\CryptoHelper.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 19,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UPLOAD001",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "The SaveTrackFile method in MusicService writes uploaded files directly using their original file name from user input, allowing for path traversal and potentially overwriting critical files."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services\\MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 17,
+                  "startColumn": 5,
+                  "endColumn": 41
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "DESERIALIZATION001",
+          "ruleIndex": 5,
+          "level": "warning",
+          "message": {
+            "text": "The DeserializeTrack method in MusicService deserializes user-provided JSON as a dynamic object without type checking or validation, which can expose data or result in denial of service."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services\\MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 19,
+                  "endLine": 23,
+                  "startColumn": 5,
+                  "endColumn": 71
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "AUTH002",
+          "ruleIndex": 6,
+          "level": "warning",
+          "message": {
+            "text": "The MusicController endpoints (track, upload, play) and UserController endpoints (greet) have no evident authentication or authorization requirements, potentially exposing them to unauthorized use."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers\\MusicController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 33,
+                  "startColumn": 1,
+                  "endColumn": 2
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQLI-001",
+              "shortDescription": {
+                "text": "SQL Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "XSS-001",
+              "shortDescription": {
+                "text": "Cross-Site Scripting (XSS) vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Scripting"
+                ]
+              }
+            },
+            {
+              "id": "CRYPTO-001",
+              "shortDescription": {
+                "text": "Insecure cryptographic implementation"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "AUTH-001",
+              "shortDescription": {
+                "text": "Hardcoded credentials"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "FILE-001",
+              "shortDescription": {
+                "text": "Insecure file upload"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            },
+            {
+              "id": "DESER-001",
+              "shortDescription": {
+                "text": "Insecure deserialization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "CRYPTO-002",
+              "shortDescription": {
+                "text": "Hardcoded cryptographic key"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQLI-001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Direct string concatenation in SQL query in GetTrackById method makes it vulnerable to SQL injection"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 8,
+                  "startColumn": 9,
+                  "endColumn": 70
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS-001",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input in Greet method is reflected in HTML response"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/UserController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 20,
+                  "startColumn": 9,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CRYPTO-001",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Use of weak DES algorithm with hardcoded key in CryptoHelper"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Helpers/CryptoHelper.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 16,
+                  "startColumn": 5,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "AUTH-001",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "Hardcoded credentials in UserService.Authenticate method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/UserService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 6,
+                  "endLine": 6,
+                  "startColumn": 9,
+                  "endColumn": 56
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FILE-001",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "File upload without proper file type validation or size restrictions"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 16,
+                  "startColumn": 5,
+                  "endColumn": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "DESER-001",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "Unsafe deserialization of dynamic type in DeserializeTrack method"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 19,
+                  "endLine": 19,
+                  "startColumn": 9,
+                  "endColumn": 60
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CRYPTO-002",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded encryption key in CryptoHelper"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Helpers/CryptoHelper.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 8,
+                  "startColumn": 25,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SQL_INJECTION",
+              "shortDescription": {
+                "text": "SQL Injection vulnerability detected."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "XSS",
+              "shortDescription": {
+                "text": "Cross-Site Scripting (XSS) vulnerability detected."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "HARDCODED_CREDENTIALS",
+              "shortDescription": {
+                "text": "Hardcoded credentials detected."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_FILE_UPLOAD",
+              "shortDescription": {
+                "text": "Insecure file upload handling detected."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_CRYPTO",
+              "shortDescription": {
+                "text": "Insecure cryptographic practices detected."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SQL_INJECTION",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized input used in SQL query."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 11,
+                  "startColumn": 13,
+                  "endColumn": 34
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "User input directly embedded in HTML response without sanitization."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/UserController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 19,
+                  "endLine": 21,
+                  "startColumn": 16,
+                  "endColumn": 48
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HARDCODED_CREDENTIALS",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "Hardcoded username and password in authentication logic."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/UserService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 10,
+                  "startColumn": 16,
+                  "endColumn": 42
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_FILE_UPLOAD",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "File uploads saved without validation or restriction."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/MusicService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 18,
+                  "startColumn": 13,
+                  "endColumn": 26
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_CRYPTO",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "Use of weak DES algorithm and hardcoded encryption key."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Helpers/CryptoHelper.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 17,
+                  "startColumn": 13,
+                  "endColumn": 34
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

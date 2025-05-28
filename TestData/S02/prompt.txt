@@ -1,0 +1,121 @@
+----- HeaderHelper.cs
+internal static class HeaderHelper
+{
+    internal static IEnumerable<AcceptLanguagePart>? ParseAcceptLanguage(string? headerValue)
+    {
+        if (string.IsNullOrWhiteSpace(headerValue))
+        {
+            return null;
+        }
+
+        var parts = headerValue.Split(',')
+            .Select(x => x.Trim().Split(';'))
+            .Select(x =>
+            {
+                if (x.Length != 2)
+                {
+                    return new AcceptLanguagePart(x.First());
+                }
+                var value = float.TryParse(x[1].Split('=').Last(), out var i) ? i : 0;
+                return new AcceptLanguagePart(x.First(), value);
+            })
+            .ToList();
+
+        if (!parts.Any())
+        {
+            return null;
+        }
+        return parts.AsEnumerable();
+    }
+
+    internal record AcceptLanguagePart(string Language, float Value = 1f);
+}
+----- Program.cs
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Data.Sqlite;
+using System.Text.Encodings.Web;
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+// Inicjalizacja bazy danych SQLite w pamięci
+var connectionString = "Data Source=:memory:";
+var connection = new SqliteConnection(connectionString);
+connection.Open();
+
+// Tworzenie przykładowej tabeli
+var command = connection.CreateCommand();
+command.CommandText =
+@"
+CREATE TABLE Users (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT
+);
+
+INSERT INTO Users (Name) VALUES ('Alice');
+INSERT INTO Users (Name) VALUES ('Bob');
+";
+command.ExecuteNonQuery();
+
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsync(@"
+        <html>
+        <body>
+            <h1>Search Users</h1>
+            <form method='get' action='/search'>
+                <input name='name' />
+                <button type='submit'>Search</button>
+            </form>
+
+            <h1>Say Hello</h1>
+            <form method='get' action='/xss'>
+                <input name='message' />
+                <button type='submit'>Send</button>
+            </form>
+        </body>
+        </html>
+    ");
+});
+
+app.MapGet("/search", async context =>
+{
+    var name = context.Request.Query["name"];
+    var sql = $"SELECT * FROM Users WHERE Name = '{name}'";
+    var cmd = connection.CreateCommand();
+    cmd.CommandText = sql;
+
+    var reader = cmd.ExecuteReader();
+    await context.Response.WriteAsync("<h2>Results:</h2><ul>");
+    while (reader.Read())
+    {
+        await context.Response.WriteAsync($"<li>{reader["Name"]}</li>");
+    }
+    await context.Response.WriteAsync("</ul>");
+});
+
+app.MapGet("/template", async context =>
+{
+    var message = context.Request.Query["message"];
+    await context.Response.WriteAsync($"<h2>Your message:</h2><p>{message}</p>");
+});
+
+app.Run();
+
+----- S02.csproj
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.5" />
+  </ItemGroup>
+
+</Project>
+
+-----

@@ -1,0 +1,10 @@
+Snyk - Duration: 00:00:29.2656387
+SonarQube - Duration: 00:01:03.9047248
+19.05.2025 22:12:54: openai/gpt-4.1 successed - 4,7691 seconds
+19.05.2025 22:13:16: meta/Llama-4-Scout-17B-16E-Instruct successed - 22,7094 seconds
+19.05.2025 22:14:24: mistral-ai/Mistral-Large-2411 successed - 67,2732 seconds
+LLMs - Duration: 00:01:35.4565414
+CodeQL - Duration: 00:03:33.0881197
+Snyk - Duration: 00:00:40.7586014
+22.05.2025 23:02:08: deepseek/DeepSeek-V3-0324 successed - 9,0828 seconds
+LLMs - Duration: 00:00:09.8607378

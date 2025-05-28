@@ -1,0 +1,468 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "PLAIN_PASSWORD_STORAGE",
+              "shortDescription": {
+                "text": "Do not store passwords in plain text."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure password storage"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_PASSWORD_COMPARISON",
+              "shortDescription": {
+                "text": "Insecure authentication check using plain string comparison."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure authentication"
+                ]
+              }
+            },
+            {
+              "id": "MISSING_AUTHORIZATION_PROTECTION",
+              "shortDescription": {
+                "text": "API endpoints lack explicit authentication and authorization requirements."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Missing authentication/authorization"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "PLAIN_PASSWORD_STORAGE",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "User passwords are stored as plain text in memory without any hashing or encryption. This exposes users to risk if the application memory is exposed or accidentally dumped. Always hash and salt passwords before storing them."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/UserAccountService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 6,
+                  "endLine": 21,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_PASSWORD_COMPARISON",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "The authentication process compares plain text passwords directly. This is insecure and allows successful login if a user's password is leaked. Always store and compare hashed (with salt) passwords."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/UserAccountService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 16,
+                  "endLine": 19,
+                  "startColumn": 5,
+                  "endColumn": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "MISSING_AUTHORIZATION_PROTECTION",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "LockerController and UserController do not enforce authentication or authorization on sensitive endpoints, making it possible for unauthorized users to access or modify critical resources."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/LockerController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 39,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SEC-001",
+              "shortDescription": {
+                "text": "Insecure Password Storage"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SEC-002",
+              "shortDescription": {
+                "text": "Missing Password Hashing"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SEC-003",
+              "shortDescription": {
+                "text": "No Rate Limiting on Authentication"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SEC-004",
+              "shortDescription": {
+                "text": "No CSRF Protection"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Request Forgery"
+                ]
+              }
+            },
+            {
+              "id": "SEC-005",
+              "shortDescription": {
+                "text": "No Input Sanitization"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Input Validation"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SEC-001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Passwords are stored in plaintext in the UserAccountService, which is insecure password storage practice."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/UserAccountService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 1,
+                  "endLine": 15,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-002",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "The Login method compares plaintext passwords, indicating no password hashing is implemented."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/UserAccountService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 15,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-003",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "The login endpoint has no rate limiting, making it vulnerable to brute force attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/UserController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 19,
+                  "endLine": 26,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-004",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "The application doesn't implement CSRF protection for state-changing operations like package assignment."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/LockerController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 1,
+                  "endLine": 25,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC-005",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "User inputs (like locker IDs) are not sanitized before use, potentially leading to injection attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/LockerController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 15,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "INSECURE_STORAGE",
+              "shortDescription": {
+                "text": "Passwords should not be stored in plaintext."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Storage"
+                ]
+              }
+            },
+            {
+              "id": "HARDCODED_CREDENTIALS",
+              "shortDescription": {
+                "text": "Hardcoded credentials can lead to unauthorized access."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded Credentials"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "INSECURE_STORAGE",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Passwords are stored in plaintext in a ConcurrentDictionary."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/UserAccountService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 9,
+                  "startColumn": 5,
+                  "endColumn": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HARDCODED_CREDENTIALS",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "Hardcoded locker information including its ID and location."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Services/LockerService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 8,
+                  "startColumn": 13,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

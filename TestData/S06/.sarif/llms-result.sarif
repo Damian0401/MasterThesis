@@ -1,0 +1,1104 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "HARDCODED_CREDENTIALS",
+              "shortDescription": {
+                "text": "Credentials should not be hardcoded in code."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded credentials or secrets"
+                ]
+              }
+            },
+            {
+              "id": "SQL_INJECTION",
+              "shortDescription": {
+                "text": "User input should not be directly interpolated into SQL queries."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_FILE_UPLOAD",
+              "shortDescription": {
+                "text": "Unrestricted file uploads can lead to security risks like overwriting or webshell."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure file handling"
+                ]
+              }
+            },
+            {
+              "id": "CROSS_SITE_SCRIPTING",
+              "shortDescription": {
+                "text": "User input is directly rendered into HTML content without sanitization."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cross-Site Scripting (XSS)"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_DESERIALIZATION",
+              "shortDescription": {
+                "text": "Deserializing untrusted data can allow code execution or data manipulation."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "WEAK_CRYPTOGRAPHY",
+              "shortDescription": {
+                "text": "DES is a weak and deprecated cipher algorithm."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure use of cryptography"
+                ]
+              }
+            },
+            {
+              "id": "COMMAND_INJECTION",
+              "shortDescription": {
+                "text": "User input should not be concatenated directly into shell commands."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Command Injection"
+                ]
+              }
+            },
+            {
+              "id": "INSECURE_FILE_WRITE",
+              "shortDescription": {
+                "text": "Writing user-controlled file names to disk without validation can lead to path traversal."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure file handling"
+                ]
+              }
+            },
+            {
+              "id": "OUTDATED_DEPENDENCY",
+              "shortDescription": {
+                "text": "Use up-to-date libraries to avoid known vulnerabilities."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Use of outdated or vulnerable libraries"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "HARDCODED_CREDENTIALS",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded username and password found. Storing credentials directly in code exposes them and makes secrets management impossible."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 14,
+                  "startColumn": 9,
+                  "endColumn": 44
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQL_INJECTION",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "SQL query includes unsanitized user input (name) directly in query string. This allows SQL Injection attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 16,
+                  "endLine": 18,
+                  "startColumn": 9,
+                  "endColumn": 68
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_FILE_UPLOAD",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "File upload handler writes the file using its original file name without any checks for allowed extensions or dangerous filenames, enabling path traversal and unrestricted uploads."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 26,
+                  "startColumn": 9,
+                  "endColumn": 30
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CROSS_SITE_SCRIPTING",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "User-provided input (input) is embedded directly in HTML output, making this endpoint vulnerable to reflected Cross-Site Scripting (XSS) attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 28,
+                  "endLine": 31,
+                  "startColumn": 9,
+                  "endColumn": 92
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_DESERIALIZATION",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Data from user input is deserialized with JsonConvert without validation. This can lead to insecure deserialization and potential code execution if objects are trusted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 12,
+                  "endLine": 14,
+                  "startColumn": 5,
+                  "endColumn": 82
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "WEAK_CRYPTOGRAPHY",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "DES encryption algorithm is used with a hardcoded 8-byte key. DES is considered broken and insecure for modern applications, and hardcoded keys are dangerous."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 25,
+                  "startColumn": 5,
+                  "endColumn": 40
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "COMMAND_INJECTION",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "The command argument is used directly to build a shell command that is run on the OS, enabling command injection if command is unsanitized user input."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 27,
+                  "endLine": 34,
+                  "startColumn": 5,
+                  "endColumn": 48
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_DESERIALIZATION",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "Data is deserialized from user-provided string using System.Text.Json without prior validation or allowed types. May allow for data manipulation or DoS attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Utils.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 6,
+                  "endLine": 8,
+                  "startColumn": 5,
+                  "endColumn": 66
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "INSECURE_FILE_WRITE",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "The SaveToFile method allows arbitrary filenames without sanitization, which can be exploited for path traversal to write files outside the intended directory."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Utils.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 12,
+                  "startColumn": 5,
+                  "endColumn": 39
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "OUTDATED_DEPENDENCY",
+          "ruleIndex": 8,
+          "level": "warning",
+          "message": {
+            "text": "The Newtonsoft.Json package is used (version 13.0.3). Ensure it is up to date and has no unpatched security vulnerabilities."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "S06.csproj",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 13,
+                  "endLine": 13,
+                  "startColumn": 5,
+                  "endColumn": 78
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "AUTH-001",
+              "shortDescription": {
+                "text": "Hardcoded credentials in authentication"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authentication"
+                ]
+              }
+            },
+            {
+              "id": "SQLI-001",
+              "shortDescription": {
+                "text": "SQL Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "SQL Injection"
+                ]
+              }
+            },
+            {
+              "id": "XSS-001",
+              "shortDescription": {
+                "text": "Cross-Site Scripting (XSS) vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "XSS"
+                ]
+              }
+            },
+            {
+              "id": "FILE-001",
+              "shortDescription": {
+                "text": "Unrestricted file upload"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "File Handling"
+                ]
+              }
+            },
+            {
+              "id": "CRYPTO-001",
+              "shortDescription": {
+                "text": "Insecure cryptographic implementation"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Cryptography"
+                ]
+              }
+            },
+            {
+              "id": "CMD-001",
+              "shortDescription": {
+                "text": "Command injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Command Injection"
+                ]
+              }
+            },
+            {
+              "id": "DESER-001",
+              "shortDescription": {
+                "text": "Insecure deserialization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            },
+            {
+              "id": "DESER-002",
+              "shortDescription": {
+                "text": "Insecure deserialization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure Deserialization"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "AUTH-001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded credentials (username: 'admin', password: 'pass123') found in authentication logic."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 8,
+                  "endLine": 11,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLI-001",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input used directly in SQL query construction."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 16,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS-001",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input directly reflected in HTML output."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 30,
+                  "endLine": 33,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FILE-001",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "File uploads are not validated for type, size, or content."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 24,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CRYPTO-001",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Using DES encryption with hardcoded key and IV (weak algorithm and key management)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 14,
+                  "endLine": 22,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CMD-001",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input used in command execution."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 24,
+                  "endLine": 30,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "DESER-001",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "Untrusted data deserialized without validation (JsonConvert.DeserializeObject)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 9,
+                  "endLine": 12,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "DESER-002",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "Untrusted data deserialized without validation (JsonSerializer.Deserialize)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Utils.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 6,
+                  "endLine": 9,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "HardcodedCredentials",
+              "shortDescription": {
+                "text": "Hardcoded credentials or secrets"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "SQLInjection",
+              "shortDescription": {
+                "text": "SQL Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "XSS",
+              "shortDescription": {
+                "text": "Cross-Site Scripting (XSS) vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "InsecureFileUpload",
+              "shortDescription": {
+                "text": "Insecure file handling"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "InsecureDeserialization",
+              "shortDescription": {
+                "text": "Insecure deserialization"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "InsecureCryptography",
+              "shortDescription": {
+                "text": "Insecure use of cryptography"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "CommandInjection",
+              "shortDescription": {
+                "text": "Command Injection vulnerability"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "HardcodedCredentials",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded username and password in the login method."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "AuthController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 14,
+                  "startColumn": 9,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SQLInjection",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input concatenated directly into SQL query."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 17,
+                  "endLine": 19,
+                  "startColumn": 9,
+                  "endColumn": 47
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "XSS",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input used directly in HTML response."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 27,
+                  "endLine": 29,
+                  "startColumn": 9,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureFileUpload",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "Unrestricted file upload without validation or sanitization."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelController.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 22,
+                  "endLine": 25,
+                  "startColumn": 9,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureDeserialization",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "Deserialization without type safety using JsonConvert."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 16,
+                  "endLine": 18,
+                  "startColumn": 9,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureCryptography",
+          "ruleIndex": 5,
+          "level": "error",
+          "message": {
+            "text": "Use of weak DES encryption algorithm with hardcoded key and IV."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 32,
+                  "startColumn": 9,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CommandInjection",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "Unsanitized user input used directly in command execution."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "HotelService.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 34,
+                  "endLine": 40,
+                  "startColumn": 9,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureDeserialization",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "Deserialization without type safety using JsonSerializer."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Utils.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 6,
+                  "endLine": 8,
+                  "startColumn": 9,
+                  "endColumn": 13
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

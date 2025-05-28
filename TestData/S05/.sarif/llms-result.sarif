@@ -1,0 +1,600 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "openai/gpt-4.1",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "Auth.MissingAuthorization.UsersList",
+              "shortDescription": {
+                "text": "Admin-only endpoints should enforce authorization."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authorization"
+                ]
+              }
+            },
+            {
+              "id": "Auth.MissingAuthorization.DeleteUser",
+              "shortDescription": {
+                "text": "Endpoints allowing account deletions must enforce strict authorization."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Authorization"
+                ]
+              }
+            },
+            {
+              "id": "Creds.Hardcoded.AdminAccount",
+              "shortDescription": {
+                "text": "Hardcoding admin accounts with default credentials is insecure."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded_Credentials"
+                ]
+              }
+            },
+            {
+              "id": "Input.NoPasswordPolicy",
+              "shortDescription": {
+                "text": "User registration should enforce strong password policies."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Input_Validation"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "Auth.MissingAuthorization.UsersList",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "The /users endpoint exposes a list of all usernames but lacks authentication and authorization, allowing any user to enumerate usernames. This breaks the principle of least privilege and may enable enumeration attacks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 63,
+                  "endLine": 68,
+                  "startColumn": 1,
+                  "endColumn": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "Auth.MissingAuthorization.DeleteUser",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "The /users/{username} delete endpoint does not perform authentication or authorization, allowing any user (including anonymous) to delete arbitrary user accounts."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 70,
+                  "endLine": 76,
+                  "startColumn": 1,
+                  "endColumn": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "Creds.Hardcoded.AdminAccount",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "An 'admin' user is automatically created at application startup with a default, weak password ('Admin123!'), which can be easily discovered and abused by attackers if not immediately changed."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 34,
+                  "endLine": 41,
+                  "startColumn": 1,
+                  "endColumn": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "Input.NoPasswordPolicy",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "The /register endpoint accepts passwords but does not enforce any custom password strength or validation policy, relying solely on Identity defaults, which could be insufficient in some deployments and regulatory environments."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 44,
+                  "endLine": 49,
+                  "startColumn": 1,
+                  "endColumn": 2
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "deepseek/DeepSeek-V3-0324",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "SEC001",
+              "shortDescription": {
+                "text": "Hardcoded credentials in initialization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Hardcoded credentials"
+                ]
+              }
+            },
+            {
+              "id": "SEC002",
+              "shortDescription": {
+                "text": "Missing password complexity requirements"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure authentication"
+                ]
+              }
+            },
+            {
+              "id": "SEC003",
+              "shortDescription": {
+                "text": "Sensitive endpoint without authorization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Missing authorization"
+                ]
+              }
+            },
+            {
+              "id": "SEC004",
+              "shortDescription": {
+                "text": "Sensitive operation without authorization"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Missing authorization"
+                ]
+              }
+            },
+            {
+              "id": "SEC005",
+              "shortDescription": {
+                "text": "JWT security configuration"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Insecure cryptography"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SEC001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "The application creates a default admin user with hardcoded credentials ('admin'/'Admin123!') which poses a security risk."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 35,
+                  "endLine": 42,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC002",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "The registration endpoint accepts any password without enforcing complexity requirements."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 45,
+                  "endLine": 50,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC003",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "The '/users' endpoint exposes all usernames without any authorization check, potentially leaking sensitive information."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 80,
+                  "endLine": 84,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "The '/users/{username}' delete endpoint allows any authenticated user to delete accounts without proper authorization checks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 87,
+                  "endLine": 93,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SEC005",
+          "ruleIndex": 4,
+          "level": "warning",
+          "message": {
+            "text": "The JWT configuration doesn't specify a minimum key length requirement. Consider enforcing a minimum of 256-bit keys for HS256 algorithm."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 18,
+                  "endLine": 30,
+                  "startColumn": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "mistral-ai/Mistral-Large-2411",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "informationUri": "https://models.github.ai/inference",
+          "rules": [
+            {
+              "id": "HardcodedCredentials",
+              "shortDescription": {
+                "text": "Hardcoded credentials or secrets"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "ImproperInputValidation",
+              "shortDescription": {
+                "text": "Improper input validation or lack of sanitization"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            },
+            {
+              "id": "InsecureAuthentication",
+              "shortDescription": {
+                "text": "Insecure or missing authentication/authorization mechanisms"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": ""
+              },
+              "properties": {
+                "tags": [],
+                "categories": [
+                  "Security"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "HardcodedCredentials",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded admin credentials found in the code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 37,
+                  "endLine": 37,
+                  "startColumn": 53,
+                  "endColumn": 70
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "HardcodedCredentials",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Hardcoded admin password found in the code."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 40,
+                  "endLine": 40,
+                  "startColumn": 49,
+                  "endColumn": 62
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "ImproperInputValidation",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "Input validation is missing for the user registration endpoint."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 76,
+                  "endLine": 80,
+                  "startColumn": 5,
+                  "endColumn": 29
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureAuthentication",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "The user list endpoint does not have proper authentication/authorization checks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 101,
+                  "endLine": 105,
+                  "startColumn": 5,
+                  "endColumn": 36
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "InsecureAuthentication",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "The user deletion endpoint does not have proper authentication/authorization checks."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Program.cs",
+                  "uriBaseId": "solutionDir"
+                },
+                "region": {
+                  "startLine": 108,
+                  "endLine": 113,
+                  "startColumn": 5,
+                  "endColumn": 36
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

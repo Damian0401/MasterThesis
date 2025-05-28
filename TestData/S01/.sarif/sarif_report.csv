@@ -1,0 +1,59 @@
+SARIF File,Driver Name,Total Results,ruleId,message,path,startLine,endLine,startColumn,endColumn,isCorrect
+codeql-result.sarif,CodeQL,6,cs/web/xss,[User-provided value](1) flows to here and is written to HTML or JavaScript.,Program.cs,46,,72,83,0
+codeql-result.sarif,CodeQL,6,cs/sql-injection,This query depends on [this ASP.NET Core query string](1).,Program.cs,24,,34,78,1
+codeql-result.sarif,CodeQL,6,cs/sql-injection,This query depends on [this ASP.NET Core query string](1).,Program.cs,83,,34,78,1
+codeql-result.sarif,CodeQL,6,cs/insecure-sql-connection,[Connection string](1) flows to this SQL connection and does not specify `Encrypt=True`.,Program.cs,23,,40,50,0
+codeql-result.sarif,CodeQL,6,cs/insecure-sql-connection,[Connection string](1) flows to this SQL connection and does not specify `Encrypt=True`.,Program.cs,82,,40,50,0
+codeql-result.sarif,CodeQL,6,cs/hardcoded-connection-string-credentials,"'ConnectionString' property includes hard-coded credentials set in [object creation of type SqlConnection](1).
+'ConnectionString' property includes hard-coded credentials set in [object creation of type SqlConnection](2).",Program.cs,14,,21,95,1
+llms-result.sarif,openai/gpt-4.1,13,SQL_INJECTION,Potential SQL Injection vulnerability: User input 'id' is used directly in the SQL command string without parameterization.,Program.cs,13,23,5,6,1
+llms-result.sarif,openai/gpt-4.1,13,SQL_INJECTION,Potential SQL Injection vulnerability: User input 'id' is used directly in the SQL command string without parameterization.,Program.cs,50,78,5,6,1
+llms-result.sarif,openai/gpt-4.1,13,INSECURE_DESERIALIZATION,"Untrusted input is deserialized directly by JsonSerializer.Deserialize, which can introduce security issues if the input is not trusted or validated.",HelperService.cs,11,14,5,6,0
+llms-result.sarif,openai/gpt-4.1,13,INSECURE_CRYPTOGRAPHY_DES_KEY,"Symmetric encryption uses hardcoded, short DES key ('12345678'). DES is considered weak and should not be used.",HelperService.cs,16,26,5,6,1
+llms-result.sarif,openai/gpt-4.1,13,HARDCODED_SECRET_JWT,A hardcoded value is used for 'jwtSecretKey' which may expose application secrets.,Program.cs,9,9,1,60,1
+llms-result.sarif,openai/gpt-4.1,13,HARDCODED_DB_CREDENTIALS,Database connection string contains hardcoded credentials.,Program.cs,7,7,1,90,1
+llms-result.sarif,openai/gpt-4.1,13,HARDCODED_API_KEY,openAiApiKey is hardcoded in the source code.,Program.cs,8,8,1,62,1
+llms-result.sarif,openai/gpt-4.1,13,COMMAND_INJECTION,The 'ExecuteCommand' method takes dynamic 'command' input to construct OS commands. This allows arbitrary command execution if user input is not validated.,HelperService.cs,28,36,5,6,0
+llms-result.sarif,openai/gpt-4.1,13,INSECURE_FILE_UPLOAD,"File uploads are saved using file.FileName without sanitization or validation, allowing potential path traversal (e.g., '../').",Program.cs,34,42,5,6,1
+llms-result.sarif,openai/gpt-4.1,13,DEBUG_INFORMATION_LEAK,"The '/debug' endpoint exposes all environment variables, which may include sensitive secrets.",Program.cs,44,47,5,6,0
+llms-result.sarif,openai/gpt-4.1,13,MISSING_AUTHORIZATION,The '/admin' endpoint does not require authentication or authorization and exposes sensitive content.,Program.cs,49,52,5,6,0
+llms-result.sarif,openai/gpt-4.1,13,USE_OF_WEAK_CRYPTO_ALGORITHM,The EncryptData method uses the insecure DES algorithm for symmetric encryption.,HelperService.cs,16,26,5,6,1
+llms-result.sarif,openai/gpt-4.1,13,OUTDATED_LIBRARY,"The referenced System.Data.SqlClient is version 4.9.0, which is outdated and may contain known vulnerabilities. Update to the latest stable release.",S01.csproj,10,10,5,73,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,SQLI-001,"SQL query is built using string concatenation with user input, making it vulnerable to SQL injection.",Program.cs,20,20,17,77,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,SQLI-002,SQL query is built using string concatenation with user input in JWT generation endpoint.,Program.cs,80,80,17,77,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,CRYPTO-001,DES encryption is used with a hardcoded weak key (12345678). DES is considered insecure and should not be used.,HelperService.cs,15,15,17,48,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,CRYPTO-002,JWT uses a weak secret key (secretkey123) which is hardcoded in the source code.,Program.cs,15,15,1,30,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,SECRET-001,Database connection string with credentials is hardcoded in the source code.,Program.cs,12,12,1,80,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,SECRET-002,OpenAI API key is hardcoded in the source code.,Program.cs,13,13,1,60,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,CMD-001,Process.Start() is called with user-controlled input without proper validation/sanitization.,HelperService.cs,30,30,9,60,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,FILE-001,"File upload endpoint accepts any file without validation of file type or content, which could lead to malicious file uploads.",Program.cs,50,50,1,20,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,AUTH-001,Admin endpoint is accessible without any authentication mechanism.,Program.cs,65,65,1,20,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,DESER-001,JsonSerializer.Deserialize<dynamic>() is used which could be dangerous if the input is attacker-controlled.,HelperService.cs,10,10,9,50,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,11,INFO-001,Debug endpoint exposes all environment variables which may contain sensitive information.,Program.cs,60,60,1,20,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,SQLInjection,"The SQL query is constructed using unsanitized user input, which makes it vulnerable to SQL Injection attacks.",Program.cs,28,28,30,65,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,SQLInjection,"The SQL query is constructed using unsanitized user input, which makes it vulnerable to SQL Injection attacks.",Program.cs,80,80,30,65,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,CommandInjection,"The command is constructed using unsanitized user input, which makes it vulnerable to Command Injection attacks.",HelperService.cs,29,29,21,36,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,HardcodedCredentials,Database credentials are hardcoded in the source code.,Program.cs,12,12,12,78,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,HardcodedCredentials,API key is hardcoded in the source code.,Program.cs,13,13,12,47,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,HardcodedCredentials,JWT secret key is hardcoded in the source code.,Program.cs,14,14,12,31,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,InsecureDeserialization,Deserialization of untrusted data can lead to security vulnerabilities.,HelperService.cs,12,12,23,66,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,WeakEncryption,DES encryption algorithm is weak and should not be used.,HelperService.cs,17,17,13,24,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,PathTraversal,Unrestricted file uploads can lead to path traversal vulnerabilities.,Program.cs,61,61,20,47,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,SensitiveDataExposure,Exposing environment variables can lead to sensitive data exposure.,Program.cs,73,73,20,66,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,11,InsecureAuthentication,No authentication/authorization mechanism is enforced for accessing sensitive data.,Program.cs,87,87,17,69,0
+snyk-result.sarif,SnykCode,10,csharp/HardcodedSecret,A hardcoded string is used to encrypt data within global::Microsoft.IdentityModel.Tokens.SymmetricSecurityKey. Generate the value with a cryptographically strong random number generator and do not hardcode it in source code.,Program.cs,97,97,19,81,1
+snyk-result.sarif,SnykCode,10,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found hardcoded credential used in a database connection string.,Program.cs,14,14,21,95,1
+snyk-result.sarif,SnykCode,10,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found hardcoded credential used in secret key variable declaration.,Program.cs,15,15,8,61,1
+snyk-result.sarif,SnykCode,10,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found hardcoded credential used in secret key variable declaration.,Program.cs,17,17,8,37,1
+snyk-result.sarif,SnykCode,10,csharp/PT,"Unsanitized input from a web form flows into global::System.IO.FileStream, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.",Program.cs,58,58,28,69,1
+snyk-result.sarif,SnykCode,10,csharp/Sqli,"Unsanitized input from an HTTP parameter flows into global::System.Data.SqlClient.SqlCommand, where it is used in an SQL query. This may result in an SQL Injection vulnerability.",Program.cs,24,24,19,85,1
+snyk-result.sarif,SnykCode,10,csharp/Sqli,"Unsanitized input from an HTTP parameter flows into global::System.Data.SqlClient.SqlCommand, where it is used in an SQL query. This may result in an SQL Injection vulnerability.",Program.cs,83,83,19,85,1
+snyk-result.sarif,SnykCode,10,csharp/XSS,Unsanitized input from data from a remote resource flows into an HTTP response via WriteAsync. This may result in an XSS vulnerability.,Program.cs,49,49,11,38,0
+snyk-result.sarif,SnykCode,10,csharp/XSS,Unsanitized input from a web form flows into an HTTP response via WriteAsync. This may result in an XSS vulnerability.,Program.cs,60,60,15,42,0
+snyk-result.sarif,SnykCode,10,csharp/XSS,Unsanitized input from an HTTP parameter flows into an HTTP response via WriteAsync. This may result in an XSS vulnerability.,Program.cs,109,109,15,42,0
+sonarqube-result.sarif,SonarQube,6,csharpsquid:S2068,"""password"" detected here, make sure this is not a hard-coded credential.",Program.cs,14,14,7,94,1
+sonarqube-result.sarif,SonarQube,6,csharpsquid:S6418,"""openAiApiKey"" detected here, make sure this is not a hard-coded secret.",Program.cs,15,15,22,60,1
+sonarqube-result.sarif,SonarQube,6,csharpsquid:S2077,Make sure using a dynamically formatted SQL query is safe here.,Program.cs,24,24,18,84,1
+sonarqube-result.sarif,SonarQube,6,csharpsquid:S2077,Make sure using a dynamically formatted SQL query is safe here.,Program.cs,83,83,18,84,1
+sonarqube-result.sarif,SonarQube,6,csharpsquid:S5332,Using http protocol is insecure. Use https instead.,Program.cs,102,102,22,44,0
+sonarqube-result.sarif,SonarQube,6,csharpsquid:S4036,"Make sure the ""PATH"" used to find this command includes only what you intend.",HelperService.cs,32,35,19,9,0

@@ -1,0 +1,147 @@
+----- Program.cs
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Enable middleware
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
+----- S09.csproj
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>$(NoWarn);SYSLIB0011</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  </ItemGroup>
+
+</Project>
+
+----- Controllers\AuthController.cs
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
+
+[ApiController]
+[Route("[controller]")]
+public class AuthController : ControllerBase
+{
+    private string hardcodedPassword = "admin123";
+
+    [HttpPost]
+    public string Login(string username, string password)
+    {
+        if (password == hardcodedPassword)
+        {
+            return GenerateWeakToken(username);
+        }
+        return "Unauthorized";
+    }
+
+    private string GenerateWeakToken(string user)
+    {
+        var key = "mysecretkey";
+        var bytes = Encoding.UTF8.GetBytes(user + key);
+        using (var md5 = MD5.Create())
+        {
+            var hash = md5.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
+    }
+}
+
+----- Controllers\CommentController.cs
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("[controller]")]
+public class CommentController : ControllerBase
+{
+    [HttpPost]
+    public string PostComment([FromBody] string comment)
+    {
+        return $"<html><body>Your comment: {comment}</body></html>";
+    }
+}
+
+----- Controllers\DeserializeController.cs
+using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+[ApiController]
+[Route("[controller]")]
+public class DeserializeController : ControllerBase
+{
+    [HttpPost]
+    public string DeserializePayload([FromBody] byte[] payload)
+    {
+        using (var ms = new MemoryStream(payload))
+        {
+            var formatter = new BinaryFormatter();
+            var obj = formatter.Deserialize(ms);
+            return obj.ToString();
+        }
+    }
+}
+
+----- Controllers\UserController.cs
+using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+
+[ApiController]
+[Route("[controller]")]
+public class UserController : ControllerBase
+{
+    [HttpGet]
+    public string GetUser(string username)
+    {
+        var conn = new SqlConnection("Data Source=localhost;Initial Catalog=TestDb;Integrated Security=True");
+        conn.Open();
+        var cmd = new SqlCommand($"SELECT * FROM Users WHERE Username = '{username}'", conn);
+        var reader = cmd.ExecuteReader();
+        return reader.HasRows ? "User found" : "User not found";
+    }
+}
+
+----- Controllers\UtilityController.cs
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+
+[ApiController]
+[Route("[controller]")]
+public class UtilityController : ControllerBase
+{
+    [HttpGet]
+    public string Ping(string host)
+    {
+        var proc = new Process();
+        proc.StartInfo.FileName = "cmd.exe";
+        proc.StartInfo.Arguments = $"/C ping {host}";
+        proc.StartInfo.RedirectStandardOutput = true;
+        proc.StartInfo.UseShellExecute = false;
+        proc.Start();
+        string output = proc.StandardOutput.ReadToEnd();
+        proc.WaitForExit();
+        return output;
+    }
+}
+
+-----

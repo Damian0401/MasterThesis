@@ -1,0 +1,155 @@
+----- AuthController.cs
+using Microsoft.AspNetCore.Mvc;
+using System.Text;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
+{
+    [HttpPost("login")]
+    public IActionResult Login(string username, string password)
+    {
+        if (username == "admin" && password == "pass123")
+        {
+            return Ok("Logged in.");
+        }
+        return Unauthorized();
+    }
+}
+
+----- HotelController.cs
+using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+using System.Web;
+
+[ApiController]
+[Route("api/[controller]")]
+public class HotelController : ControllerBase
+{
+    private readonly HotelService _service;
+
+    public HotelController(HotelService service)
+    {
+        _service = service;
+    }
+
+    [HttpGet("search")]
+    public IActionResult SearchHotel(string name)
+    {
+        string query = $"SELECT * FROM Hotels WHERE Name = '{name}'";
+        return Ok(_service.RunQuery(query));
+    }
+
+    [HttpPost("upload")]
+    public IActionResult UploadFile([FromForm] IFormFile file)
+    {
+        var path = Path.Combine("uploads", file.FileName);
+        using var stream = System.IO.File.Create(path);
+        file.CopyTo(stream);
+        return Ok("File uploaded.");
+    }
+
+    [HttpGet("xss")]
+    public ContentResult Xss(string input)
+    {
+        return Content($"<html><body>Welcome {input}</body></html>", "text/html");
+    }
+}
+----- HotelService.cs
+using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
+
+public class HotelService
+{
+    public string RunQuery(string query)
+    {
+        return $"Executed: {query}";
+    }
+
+    public string DeserializeData(string input)
+    {
+        return JsonConvert.DeserializeObject<dynamic>(input).ToString();
+    }
+
+    public string EncryptData(string data)
+    {
+        var key = Encoding.UTF8.GetBytes("12345678");
+        var des = DES.Create();
+        des.Key = key;
+        des.IV = key;
+        var encryptor = des.CreateEncryptor();
+        var bytes = Encoding.UTF8.GetBytes(data);
+        var result = encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
+        return Convert.ToBase64String(result);
+    }
+
+    public string ExecuteCommand(string command)
+    {
+        var proc = new ProcessStartInfo("cmd.exe", "/c " + command)
+        {
+            RedirectStandardOutput = true
+        };
+        var process = Process.Start(proc);
+        return process.StandardOutput.ReadToEnd();
+    }
+}
+----- Models.cs
+public class Hotel
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Location { get; set; }
+}
+----- Program.cs
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddSingleton<HotelService>();
+
+var app = builder.Build();
+
+app.MapControllers();
+
+app.Run();
+
+----- S06.csproj
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.5" />
+  </ItemGroup>
+
+</Project>
+
+----- Utils.cs
+using System.IO;
+using System.Text.Json;
+
+public static class Utils
+{
+    public static T InsecureDeserialize<T>(string data)
+    {
+        return JsonSerializer.Deserialize<T>(data);
+    }
+
+    public static void SaveToFile(string filename, string content)
+    {
+        File.WriteAllText(filename, content);
+    }
+}
+
+-----

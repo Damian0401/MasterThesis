@@ -1,0 +1,41 @@
+SARIF File,Driver Name,Total Results,ruleId,message,path,startLine,endLine,startColumn,endColumn,isCorrect
+codeql-result.sarif,CodeQL,3,cs/user-controlled-bypass,"This condition guards a sensitive [action](1), but a [user-provided value](2) controls it.
+This condition guards a sensitive [action](1), but a [user-provided value](3) controls it.
+This condition guards a sensitive [action](1), but a [user-provided value](2) controls it.
+This condition guards a sensitive [action](1), but a [user-provided value](3) controls it.",AuthController.cs,11,,13,57,1
+codeql-result.sarif,CodeQL,3,cs/hardcoded-credentials,"The hard-coded value ""admin"" flows to [""admin""](1) which is compared against [access to parameter username](2).",AuthController.cs,11,,25,32,1
+codeql-result.sarif,CodeQL,3,cs/hardcoded-credentials,"The hard-coded value ""pass123"" flows to [""pass123""](1) which is compared against [access to parameter password](2).",AuthController.cs,11,,48,57,1
+llms-result.sarif,openai/gpt-4.1,10,HARDCODED_CREDENTIALS,Hardcoded username and password found. Storing credentials directly in code exposes them and makes secrets management impossible.,AuthController.cs,10,14,9,44,1
+llms-result.sarif,openai/gpt-4.1,10,SQL_INJECTION,SQL query includes unsanitized user input (name) directly in query string. This allows SQL Injection attacks.,HotelController.cs,16,18,9,68,1
+llms-result.sarif,openai/gpt-4.1,10,INSECURE_FILE_UPLOAD,"File upload handler writes the file using its original file name without any checks for allowed extensions or dangerous filenames, enabling path traversal and unrestricted uploads.",HotelController.cs,20,26,9,30,1
+llms-result.sarif,openai/gpt-4.1,10,CROSS_SITE_SCRIPTING,"User-provided input (input) is embedded directly in HTML output, making this endpoint vulnerable to reflected Cross-Site Scripting (XSS) attacks.",HotelController.cs,28,31,9,92,1
+llms-result.sarif,openai/gpt-4.1,10,INSECURE_DESERIALIZATION,Data from user input is deserialized with JsonConvert without validation. This can lead to insecure deserialization and potential code execution if objects are trusted.,HotelService.cs,12,14,5,82,0
+llms-result.sarif,openai/gpt-4.1,10,WEAK_CRYPTOGRAPHY,"DES encryption algorithm is used with a hardcoded 8-byte key. DES is considered broken and insecure for modern applications, and hardcoded keys are dangerous.",HotelService.cs,15,25,5,40,1
+llms-result.sarif,openai/gpt-4.1,10,COMMAND_INJECTION,"The command argument is used directly to build a shell command that is run on the OS, enabling command injection if command is unsanitized user input.",HotelService.cs,27,34,5,48,1
+llms-result.sarif,openai/gpt-4.1,10,INSECURE_DESERIALIZATION,Data is deserialized from user-provided string using System.Text.Json without prior validation or allowed types. May allow for data manipulation or DoS attacks.,Utils.cs,6,8,5,66,0
+llms-result.sarif,openai/gpt-4.1,10,INSECURE_FILE_WRITE,"The SaveToFile method allows arbitrary filenames without sanitization, which can be exploited for path traversal to write files outside the intended directory.",Utils.cs,10,12,5,39,1
+llms-result.sarif,openai/gpt-4.1,10,OUTDATED_DEPENDENCY,The Newtonsoft.Json package is used (version 13.0.3). Ensure it is up to date and has no unpatched security vulnerabilities.,S06.csproj,13,13,5,78,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,AUTH-001,"Hardcoded credentials (username: 'admin', password: 'pass123') found in authentication logic.",AuthController.cs,8,11,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,SQLI-001,Unsanitized user input used directly in SQL query construction.,HotelController.cs,15,16,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,XSS-001,Unsanitized user input directly reflected in HTML output.,HotelController.cs,30,33,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,FILE-001,"File uploads are not validated for type, size, or content.",HotelController.cs,20,24,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,CRYPTO-001,Using DES encryption with hardcoded key and IV (weak algorithm and key management).,HotelService.cs,14,22,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,CMD-001,Unsanitized user input used in command execution.,HotelService.cs,24,30,1,1,1
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,DESER-001,Untrusted data deserialized without validation (JsonConvert.DeserializeObject).,HotelService.cs,9,12,1,1,0
+llms-result.sarif,deepseek/DeepSeek-V3-0324,8,DESER-002,Untrusted data deserialized without validation (JsonSerializer.Deserialize).,Utils.cs,6,9,1,1,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,HardcodedCredentials,Hardcoded username and password in the login method.,AuthController.cs,10,14,9,13,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,SQLInjection,Unsanitized user input concatenated directly into SQL query.,HotelController.cs,17,19,9,47,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,XSS,Unsanitized user input used directly in HTML response.,HotelController.cs,27,29,9,13,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,InsecureFileUpload,Unrestricted file upload without validation or sanitization.,HotelController.cs,22,25,9,13,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,InsecureDeserialization,Deserialization without type safety using JsonConvert.,HotelService.cs,16,18,9,13,0
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,InsecureCryptography,Use of weak DES encryption algorithm with hardcoded key and IV.,HotelService.cs,20,32,9,13,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,CommandInjection,Unsanitized user input used directly in command execution.,HotelService.cs,34,40,9,13,1
+llms-result.sarif,mistral-ai/Mistral-Large-2411,8,InsecureDeserialization,Deserialization without type safety using JsonSerializer.,Utils.cs,6,8,9,13,0
+snyk-result.sarif,SnykCode,7,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,AuthController.cs,9,9,26,31,1
+snyk-result.sarif,SnykCode,7,csharp/AntiforgeryTokenDisabled,This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.,HotelController.cs,24,24,26,36,1
+snyk-result.sarif,SnykCode,7,csharp/InsecureCipher,The DES cipher is insecure. Consider using AES instead.,HotelService.cs,21,21,19,29,1
+snyk-result.sarif,SnykCode,7,csharp/NoHardcodedCredentials,Do not hardcode credentials in code. Found username or password credential used in a condition.,AuthController.cs,11,11,36,57,1
+snyk-result.sarif,SnykCode,7,csharp/PT,"Unsanitized input from an HTTP parameter flows into global::System.IO.File.Create, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.",HotelController.cs,27,27,28,49,1
+snyk-result.sarif,SnykCode,7,csharp/Sqli,"Unsanitized input from an HTTP parameter flows into global::HotelService.RunQuery, where it is used in an SQL query. This may result in an SQL Injection vulnerability.",HotelController.cs,20,20,19,36,1
+snyk-result.sarif,SnykCode,7,csharp/XSS,Unsanitized input from an HTTP parameter flows into an HTTP response via global::Microsoft.AspNetCore.Mvc.ControllerBase.Content. This may result in an XSS vulnerability.,HotelController.cs,35,35,16,23,1
+sonarqube-result.sarif,SonarQube,1,csharpsquid:S4036,"Make sure the ""PATH"" used to find this command includes only what you intend.",HotelService.cs,32,35,19,9,1

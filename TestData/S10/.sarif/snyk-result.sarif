@@ -1,0 +1,428 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "SnykCode",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "rules": [
+            {
+              "id": "csharp/AntiforgeryTokenDisabled",
+              "name": "AntiforgeryTokenDisabled",
+              "shortDescription": {
+                "text": "Anti-forgery token validation disabled"
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "help": {
+                "markdown": "## Details\n\nCross-site request forgery is an attack in which a malicious third party takes advantage of a user's authenticated credentials (such as a browser cookie) to impersonate that trusted user and perform unauthorized actions. The web application server cannot tell the difference between legitimate and malicious requests. This type of attack generally begins by tricking the user with a social engineering attack, such as a link or popup that the user inadvertently clicks, causing an unauthorized request to be sent to the web server. Consequences vary: At a standard user level, attackers can change passwords, transfer funds, make purchases, or connect with contacts; from an administrator account, attackers can then make changes to or even take down the app itself.\n\nExample:\n\n```\npublic class StudentController\n{\n\t    [HttpPost()]\n        [IgnoreAntiforgeryToken(Order = 1000)]\n        public Task<object> SendForm()\n        {\n                ...\n        }\n}\n```\n\n\n## Best practices for prevention\n* In ASP.NET MVC controllers, enable anti-forgery token validation by adding the `[ValidateAntiForgeryToken]` attribute to all actions that change the state of the server.\n\n* Anti-forgery token validation is enabled by default in Razor Pages. This validation can be disabled either globally or on individual pages by using the  `[IgnoreAntiforgeryToken]`. Disabling this feature is not recommended and can allow for CSRF attacks on methods that might be performing sensitive user actions.\n\n\n## References\n* [Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-5.0)",
+                "text": ""
+              },
+              "properties": {
+                "tags": [
+                  "csharp",
+                  "AntiforgeryTokenDisabled",
+                  "Security"
+                ],
+                "categories": [
+                  "Security"
+                ],
+                "exampleCommitFixes": [
+                  {
+                    "commitURL": "https://github.com/Dynatrace/superdump/commit/cd5f0b7190d41aafc53f95974b63b5e2e99a1a26?diff=split#diff-be2476dfaf7611f947a0efff2eac019574e91edcaf691f35276d46ee11edac8cL-1",
+                    "lines": [
+                      {
+                        "line": "\t[AutoValidateAntiforgeryToken]\n",
+                        "lineNumber": 13,
+                        "lineChange": "added"
+                      },
+                      {
+                        "line": "\tpublic class LoginController : Controller {\n",
+                        "lineNumber": 14,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\tprivate readonly LdapAuthentcationService authentificationHelper;\n",
+                        "lineNumber": 15,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\tprivate readonly ILogger logger;\n",
+                        "lineNumber": 16,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\n",
+                        "lineNumber": 17,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\tpublic LoginController(LdapAuthentcationService authentificationHelper, ILoggerFactory loggerFactory) {\n",
+                        "lineNumber": 18,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\t\tthis.authentificationHelper = authentificationHelper;\n",
+                        "lineNumber": 19,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\t\tlogger = loggerFactory.CreateLogger<LoginController>();\n",
+                        "lineNumber": 20,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\t}\n",
+                        "lineNumber": 21,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\n",
+                        "lineNumber": 22,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\tpublic IActionResult Index() {\n",
+                        "lineNumber": 23,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\t\treturn View(\"Login\", new LoginViewModel { ReturnUrl = Request.Query[\"ReturnUrl\"].FirstOrDefault() ?? \"/Home/Index\" });\n",
+                        "lineNumber": 24,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\t}\n",
+                        "lineNumber": 25,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\n",
+                        "lineNumber": 26,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "\t\t[HttpPost]\n",
+                        "lineNumber": 27,
+                        "lineChange": "none"
+                      }
+                    ]
+                  },
+                  {
+                    "commitURL": "https://github.com/damienbod/AspNetCoreMvcAngular/commit/fba1c6dc595134bdefc9aa2ffb0764ee29d7f1be?diff=split#diff-c8f5e654c5707f3bb49bd646232b379408572dcd345d3929f595bc037bec7c28L-1",
+                    "lines": [
+                      {
+                        "line": "[HttpPost]\n",
+                        "lineNumber": 11,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "[Route(\"\")]\n",
+                        "lineNumber": 12,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "//[ValidateAntiForgeryToken]\r\n",
+                        "lineNumber": 13,
+                        "lineChange": "removed"
+                      },
+                      {
+                        "line": "[ValidateAntiForgeryToken]\r\n",
+                        "lineNumber": 13,
+                        "lineChange": "added"
+                      }
+                    ]
+                  },
+                  {
+                    "commitURL": "https://github.com/SOFTINUX/Base/commit/e1580f565b03b4e44bb2e7d1faeceec36e58fcfa?diff=split#diff-1e5a17815941ead6a9e0f7a3a453b32809e3dcafbfc055036a161f016cb01e45L-1",
+                    "lines": [
+                      {
+                        "line": "[HttpPost]\n",
+                        "lineNumber": 40,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "//[ExportModelStateToTempData]\n",
+                        "lineNumber": 41,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "[AllowAnonymous]\n",
+                        "lineNumber": 42,
+                        "lineChange": "none"
+                      },
+                      {
+                        "line": "[ValidateAntiForgeryToken]\n",
+                        "lineNumber": 43,
+                        "lineChange": "added"
+                      }
+                    ]
+                  }
+                ],
+                "exampleCommitDescriptions": [],
+                "precision": "very-high",
+                "repoDatasetSize": 35,
+                "cwe": [
+                  "CWE-352"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "csharp/AntiforgeryTokenDisabled",
+          "ruleIndex": 0,
+          "level": "note",
+          "message": {
+            "text": "This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.",
+            "markdown": "This {0} should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.",
+            "arguments": [
+              "[ASP.NET MVC action](0)"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/LockerController.cs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 23,
+                  "endLine": 23,
+                  "startColumn": 26,
+                  "endColumn": 39
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "0": "0b125cb4c61671bbe686645478fcf3c6f0a67d8b6024258c50fccb6c8877f432",
+            "1": "b47c3cd0.69639c37.14aa661d.9260605a.63feb440.a0ea2ac0.ce0185b2.30de9ea4.396bbaa7.c89d69f3.14aa661d.de031890.63feb440.a0ea2ac0.ce0185b2.30de9ea4"
+          },
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "id": 0,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "Controllers/LockerController.cs",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 23,
+                            "endLine": 23,
+                            "startColumn": 26,
+                            "endColumn": 39
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "priorityScore": 450,
+            "priorityScoreFactors": [
+              {
+                "label": true,
+                "type": "multipleOccurrence"
+              },
+              {
+                "label": true,
+                "type": "hotFileCodeFlow"
+              },
+              {
+                "label": true,
+                "type": "fixExamples"
+              }
+            ],
+            "isAutofixable": true
+          }
+        },
+        {
+          "ruleId": "csharp/AntiforgeryTokenDisabled",
+          "ruleIndex": 0,
+          "level": "note",
+          "message": {
+            "text": "This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.",
+            "markdown": "This {0} should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.",
+            "arguments": [
+              "[ASP.NET MVC action](0)"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/UserController.cs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 15,
+                  "endLine": 15,
+                  "startColumn": 26,
+                  "endColumn": 34
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "0": "b5fe8e6f56fc64ded3035cc1d792a52602cbc6da4eada7bb0813f5b04d82d971",
+            "1": "b47c3cd0.69639c37.68418e3d.9260605a.63feb440.a0ea2ac0.ce0185b2.8b872c79.c44d6ed0.69639c37.68418e3d.de031890.63feb440.a0ea2ac0.ce0185b2.8b872c79"
+          },
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "id": 0,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "Controllers/UserController.cs",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 15,
+                            "endLine": 15,
+                            "startColumn": 26,
+                            "endColumn": 34
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "priorityScore": 500,
+            "priorityScoreFactors": [
+              {
+                "label": true,
+                "type": "multipleOccurrence"
+              },
+              {
+                "label": true,
+                "type": "hotFileSource"
+              },
+              {
+                "label": true,
+                "type": "fixExamples"
+              }
+            ],
+            "isAutofixable": true
+          }
+        },
+        {
+          "ruleId": "csharp/AntiforgeryTokenDisabled",
+          "ruleIndex": 0,
+          "level": "note",
+          "message": {
+            "text": "This ASP.NET MVC action should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.",
+            "markdown": "This {0} should use an anti-forgery validation attribute. Not using this attribute disables Cross Site Request Forgery (CSRF) protection and allows CSRF attacks.",
+            "arguments": [
+              "[ASP.NET MVC action](0)"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Controllers/UserController.cs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 25,
+                  "endLine": 25,
+                  "startColumn": 26,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "0": "811e0ef232dd7549814f4196c4a5bac425d55d044a06562cb4a376d990624aaf",
+            "1": "b47c3cd0.69639c37.68418e3d.9260605a.63feb440.a0ea2ac0.ce0185b2.8b872c79.c44d6ed0.69639c37.68418e3d.de031890.63feb440.a0ea2ac0.ce0185b2.8b872c79"
+          },
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "id": 0,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "Controllers/UserController.cs",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 25,
+                            "endLine": 25,
+                            "startColumn": 26,
+                            "endColumn": 31
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "priorityScore": 500,
+            "priorityScoreFactors": [
+              {
+                "label": true,
+                "type": "multipleOccurrence"
+              },
+              {
+                "label": true,
+                "type": "hotFileSource"
+              },
+              {
+                "label": true,
+                "type": "fixExamples"
+              }
+            ],
+            "isAutofixable": true
+          }
+        }
+      ],
+      "properties": {
+        "coverage": [
+          {
+            "isSupported": true,
+            "lang": "C#",
+            "files": 13,
+            "type": "SUPPORTED"
+          },
+          {
+            "isSupported": true,
+            "lang": "XML",
+            "files": 5,
+            "type": "SUPPORTED"
+          }
+        ]
+      }
+    }
+  ]
+}
